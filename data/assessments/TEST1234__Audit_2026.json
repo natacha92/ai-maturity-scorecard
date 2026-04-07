@@ -1,0 +1,135 @@
+{
+  "assessment_id": "29e8bfb5-c6a3-49f4-a07f-628197d2c594",
+  "created_at": "2026-03-31T14:22:50.494849",
+  "updated_at": "2026-03-31T14:22:50.494955",
+  "client": {
+    "name": "TEST1234",
+    "secteur": null,
+    "taille": null
+  },
+  "assessment": {
+    "name": "Audit_2026",
+    "version": "v1",
+    "consultant": null
+  },
+  "responses": [
+    {
+      "question_id": "APP_ERP_001",
+      "question_type": null,
+      "answer": {
+        "selected_choice": "Oui",
+        "score": 0
+      },
+      "context": {
+        "comment": "",
+        "current_tools": [],
+        "current_documents": [],
+        "pain_points": [],
+        "weaknesses": [],
+        "obstacles": []
+      }
+    },
+    {
+      "question_id": "CAP_ERP_001",
+      "question_type": null,
+      "answer": {
+        "selected_choice": "Aucun ERP",
+        "score": 0
+      },
+      "context": {
+        "comment": "",
+        "current_tools": [],
+        "current_documents": [],
+        "pain_points": [],
+        "weaknesses": [],
+        "obstacles": []
+      }
+    },
+    {
+      "question_id": "CAP_ERP_002",
+      "question_type": null,
+      "answer": {
+        "selected_choice": "Aucune documentation",
+        "score": 0
+      },
+      "context": {
+        "comment": "",
+        "current_tools": [],
+        "current_documents": [],
+        "pain_points": [],
+        "weaknesses": [],
+        "obstacles": []
+      }
+    },
+    {
+      "question_id": "EVID_ERP_001",
+      "question_type": null,
+      "answer": {
+        "selected_choice": null,
+        "score": null
+      },
+      "context": {
+        "comment": "",
+        "current_tools": [],
+        "current_documents": [],
+        "pain_points": [],
+        "weaknesses": [],
+        "obstacles": []
+      }
+    },
+    {
+      "question_id": "APP_CRM_001",
+      "question_type": null,
+      "answer": {
+        "selected_choice": "Oui",
+        "score": 0
+      },
+      "context": {
+        "comment": "",
+        "current_tools": [],
+        "current_documents": [],
+        "pain_points": [],
+        "weaknesses": [],
+        "obstacles": []
+      }
+    },
+    {
+      "question_id": "CAP_CRM_001",
+      "question_type": null,
+      "answer": {
+        "selected_choice": "CRM structuré avec processus définis",
+        "score": 3
+      },
+      "context": {
+        "comment": "",
+        "current_tools": [],
+        "current_documents": [],
+        "pain_points": [],
+        "weaknesses": [],
+        "obstacles": []
+      }
+    },
+    {
+      "question_id": "CAP_STD_002",
+      "question_type": null,
+      "answer": {
+        "selected_choice": "Standards utilisés dans certains services",
+        "score": 2
+      },
+      "context": {
+        "comment": "",
+        "current_tools": [],
+        "current_documents": [],
+        "pain_points": [],
+        "weaknesses": [],
+        "obstacles": []
+      }
+    }
+  ],
+  "scores": {
+    "global_score": 1.42,
+    "domains": {
+      "Fondation opérationnelle du business": 1.42
+    }
+  }
+}
