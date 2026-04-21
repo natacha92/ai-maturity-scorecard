@@ -2,7 +2,7 @@ import streamlit as st
 from models.database import init_db, get_session, Client, Assessment, Response
 from src.data_loader import load_questionnaire_cached
 from engine.scoring import compute_scores
-from models.database import load_responses_for_scoring
+from models.database import load_responses_for_scoring, load_document_reviews
 from engine.recommendations import get_recommendations, generate_roadmap, seed_recommendations
 
 init_db()
@@ -38,7 +38,8 @@ selected = next(a for a in assessment_options if a["label"] == selected_label)
 
 # Load scores
 questionnaire = load_questionnaire_cached("data/questionnaire.json")
-scores = compute_scores(questionnaire, load_responses_for_scoring(selected["id"]))
+doc_reviews = load_document_reviews(selected["id"])
+scores = compute_scores(questionnaire, load_responses_for_scoring(selected["id"]), document_reviews=doc_reviews)
 recommendations = get_recommendations(scores["domains"], scores.get("subdomains"))
 roadmap = generate_roadmap(recommendations)
 
