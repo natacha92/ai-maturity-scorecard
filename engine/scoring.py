@@ -3,8 +3,73 @@ from engine.rules import parse_rule
 
 # ── Constantes ────────────────────────────────────────────────────────────────
 
-MAX_SCORE = 4.0  # Score max possible par question dans le JSON
-# Dans scoring.py, remplace score_to_maturity_label par :
+def get_max_score(question: Dict[str, Any]) -> float:
+    """Détecte dynamiquement le score max des choices."""
+    choices = question.get("choices", [])
+    if not choices:
+        return 3.0
+    return float(max(c.get("score", 0) for c in choices))
+
+
+def compute_document_penalty(
+    question: Dict[str, Any],
+    questions: List[Dict[str, Any]],
+    document_reviews: Dict[str, List[Dict[str, Any]]],
+) -> float:
+    """
+    Calcule un coefficient de pénalité documentaire (entre 0.5 et 1.0)
+    pour une question scored, en se basant sur les DocumentReview de la
+    question evidence associée (même sous-domaine, même niveau excel).
+
+    Logique :
+      - Si aucune question evidence associée, ou aucun review → pas de pénalité (1.0)
+      - conforme  = 1.0  (pas de pénalité)
+      - partiel   = 0.75 (pénalité légère)
+      - absent    = 0.5  (pénalité forte)
+      - non_vérifié → ignoré dans le calcul
+
+    Le coefficient final est la moyenne des scores des reviews analysés.
+    Le score scored est multiplié par ce coefficient.
+
+    Exemple :
+      Score déclaré = 3 (max), 2 docs : 1 conforme + 1 absent
+      → coefficient = (1.0 + 0.5) / 2 = 0.75
+      → score ajusté = 3 * 0.75 = 2.25 sur 3 → 75% au lieu de 100%
+    """
+    STATUS_COEFF = {"conforme": 1.0, "partiel": 0.75, "absent": 0.5}
+
+    # Trouve la question evidence associée :
+    # même domaine_specifique et même excel_line_ref
+    scored_line = question.get("excel_line_ref")
+    scored_subdom = question.get("domaine_specifique")
+
+    linked_evid_ids = [
+        q["question_id"]
+        for q in questions
+        if q.get("question_type") == "evidence"
+        and q.get("domaine_specifique") == scored_subdom
+        and q.get("excel_line_ref") == scored_line
+    ]
+
+    if not linked_evid_ids:
+        return 1.0  # Pas d'evidence associée → pas de pénalité
+
+    # Collecte tous les reviews de ces questions evidence
+    all_coeffs = []
+    for evid_id in linked_evid_ids:
+        reviews = document_reviews.get(evid_id, [])
+        for rev in reviews:
+            status = rev.get("status", "non_vérifié")
+            if status in STATUS_COEFF:
+                all_coeffs.append(STATUS_COEFF[status])
+
+    if not all_coeffs:
+        return 1.0  # Reviews non encore saisis → pas de pénalité
+
+    return sum(all_coeffs) / len(all_coeffs)
+
+
+
 
 MATURITY_LEVELS = [
     {"min": 0,  "max": 30,  "level": 1, "label": "Initial",         "color": "#EF4444", "description": "Approche non structurée, systèmes de base absents ou non utilisés."},
@@ -28,17 +93,66 @@ def score_to_maturity_label(score: Optional[float]) -> str:
 def score_to_color(score: Optional[float]) -> str:
     return get_maturity_level(score)["color"]
 
-def compute_scores(questions: List[Dict[str, Any]], responses: Dict[str, Dict[str, Any]]) -> Dict[str, Any]:
+def compute_level_info(score: Optional[float], max_score: float = 3.0) -> Dict[str, Any]:
+    """
+    Retourne le niveau atteint et la progression vers le suivant.
+    
+    Exemple avec max_score=3 :
+      score=0 → niveau 0, progression 0%  vers niveau 1
+      score=1 → niveau 1, progression 33% vers niveau 2
+      score=2 → niveau 2, progression 66% vers niveau 3
+      score=3 → niveau 3, progression 100% (terminé)
+    """
+    if score is None:
+        return {
+            "niveau_atteint":   None,
+            "niveau_max":       int(max_score),
+            "progression_pct":  None,
+            "vers_niveau":      None,
+            "label":            "Non évalué",
+            "complete":         False,
+        }
+
+    niveau     = int(score)
+    niveau_max = int(max_score)
+    pct        = round((score / max_score) * 100, 1) if max_score > 0 else 0
+
+    return {
+        "niveau_atteint":  niveau,
+        "niveau_max":      niveau_max,
+        "progression_pct": pct,
+        "vers_niveau":     niveau + 1 if niveau < niveau_max else None,
+        "label":           f"Niveau {niveau}" if niveau > 0 else "Non démarré",
+        "complete":        niveau >= niveau_max,
+    }
+
+
+def compute_scores(
+    questions: List[Dict[str, Any]],
+    responses: Dict[str, Dict[str, Any]],
+    document_reviews: Optional[Dict[str, List[Dict[str, Any]]]] = None,
+) -> Dict[str, Any]:
     """
     Calcule le score global et par domaine principal.
     - Exclut les questions non applicables (applicability_rule)
     - Exclut les questions marquées N/A (score_mode: exclude_if_na)
     - Pondère par 'poids'
+    - Pondère aussi par la confiance consultant
+    - Applique un coefficient de pénalité documentaire si document_reviews fourni
     - Normalise sur 100
+
+    document_reviews : dict {question_id: [review_dict, ...]}
+      Si fourni, les scores scored sont multipliés par le coefficient
+      calculé depuis les DocumentReview de la question evidence associée.
     """
+    if document_reviews is None:
+        document_reviews = {}
+
     domain_scores: Dict[str, Dict[str, float]] = {}
     global_weighted_sum = 0.0
     global_weight = 0.0
+    confidence_sum = 0.0
+    confidence_count = 0
 
     for q in questions:
         if q.get("question_type") != "scored":
@@ -48,36 +162,48 @@ def compute_scores(questions: List[Dict[str, Any]], responses: Dict[str, Dict[st
 
         response = responses.get(q["question_id"])
 
-        # Question N/A : exclure si score_mode == exclude_if_na
         if response and response.get("is_na"):
             if q.get("score_mode") == "exclude_if_na":
-                continue  # on exclut du calcul, elle ne pénalise pas
+                continue
             else:
-                score = 0.0  # score_mode normal : N/A compte comme 0
-        elif not response or response.get("score") is None:
-            continue  # pas encore répondu → on ignore
+                score = 0.0
+        elif not response:
+            continue
+        elif response.get("score") is None:
+            continue
         else:
             score = float(response["score"])
 
-        weight = float(q.get("poids", 1))
-        score_pct = (score / MAX_SCORE) * 100.0
+        weight     = float(q.get("poids", 1))
+        confidence = float(response.get("consultant_confidence", 1.0))
+        max_score  = get_max_score(q)
+        score_pct  = (score / max_score) * 100.0 if max_score > 0 else 0.0
+
+        # ── Pénalité documentaire ─────────────────────────────────
+        doc_penalty = compute_document_penalty(q, questions, document_reviews)
+        adjusted_score_pct = score_pct * confidence * doc_penalty
+
         domain = q.get("domaine_principal", "Autre")
-
         domain_scores.setdefault(domain, {"weighted_sum": 0.0, "weight": 0.0})
-        domain_scores[domain]["weighted_sum"] += score_pct * weight
-        domain_scores[domain]["weight"] += weight
+        domain_scores[domain]["weighted_sum"] += adjusted_score_pct * weight
+        domain_scores[domain]["weight"]       += weight
 
-        global_weighted_sum += score_pct * weight
-        global_weight += weight
+        global_weighted_sum += adjusted_score_pct * weight
+        global_weight       += weight
+
+        confidence_sum  += confidence
+        confidence_count += 1
 
     result = {
-        # Score global normalisé sur 100
         "global_score": round(global_weighted_sum / global_weight, 1) if global_weight else None,
-        "domains": {},
+        "domains":      {},
+        "avg_confidence": round(confidence_sum / confidence_count, 2) if confidence_count else None,
     }
 
     for domain, agg in domain_scores.items():
-        result["domains"][domain] = round(agg["weighted_sum"] / agg["weight"], 1) if agg["weight"] else None
+        result["domains"][domain] = (
+            round(agg["weighted_sum"] / agg["weight"], 1) if agg["weight"] else None
+        )
 
     return result
 
@@ -98,10 +224,13 @@ def build_maturity_structure(questions: List[Dict[str, Any]], responses: Dict[st
             if q.get("score_mode") == "exclude_if_na":
                 continue
             score_pct = 0.0
-        elif not response or response.get("score") is None:
+        elif not response:
+            continue
+        elif response.get("score") is None:
             continue
         else:
-            score_pct = (float(response["score"]) / MAX_SCORE) * 100.0
+            max_score = get_max_score(q)
+            score_pct = (float(response["score"]) / max_score) * 100.0
 
         domain        = q.get("domaine_principal", "Autre")
         segment       = q.get("domaine_specifique", "Autre")

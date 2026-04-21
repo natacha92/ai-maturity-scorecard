@@ -1,0 +1,2202 @@
+{
+  "referentiel_id": "data_maturity_v1",
+  "referentiel_label": "Référentiel de maturité data",
+  "description": "Structure de questionnaire de maturité data avec séparation entre applicabilité, scoring et preuve.",
+  "scoring_principles": {
+    "global_rule": "Seules les questions de type 'scored' contribuent au score global.",
+    "na_rule": "Toute question marquée non applicable via une question d'applicabilité parente est exclue du calcul.",
+    "evidence_rule": "Les questions de preuve ne contribuent pas directement au score sauf si une règle explicite le prévoit.",
+    "weight_rule": "Le poids représente l'importance relative de la capacité dans le calcul de la note.",
+    "fairness_rule": "Aucune capacité non pertinente pour le contexte métier ne doit pénaliser le score global."
+  },
+  "questions": [
+    {
+      "question_id": "APP_ERP_001",
+      "parent_question_id": null,
+      "question_type": "applicability",
+      "question_label": "Un système ERP est-il pertinent pour votre activité ?",
+      "question_help": "Un ERP est pertinent si vous gérez des opérations structurées : finance, achats, logistique, production.",
+      "type_reponse": "single_choice",
+      "choices": [
+        {"label": "Oui", "score": 0},
+        {"label": "Non", "score": 0}
+      ],
+      "poids": 0,
+      "niveau": 0,
+      "applicability_rule": "always",
+      "na_allowed": false,
+      "score_mode": "normal",
+	  "valeur_donnee": "Opérationnelle",
+	  "domaine_principal": "Fondation opérationnelle du business",
+	  "domaine_specifique": "Systèmes de base",
+	  "niveau_scorecard": 1,
+	  "capability_group": "ERP",
+	  "ordre_domaine_principal": 1,
+	  "ordre_domaine_specifique": 1,
+	  "ordre_niveau": 1,
+      "llm_context": {
+        "description": "Détermine si la capacité ERP doit être évaluée.",
+        "objectif": "Éviter de pénaliser les organisations sans besoin ERP."
+      }
+	  
+    },
+    {
+      "question_id": "CAP_ERP_001",
+      "parent_question_id": null,
+      "question_type": "scored",
+      "question_label": "Quel est le niveau de mise en place de votre ERP ?",
+      "question_help": "Évalue la couverture fonctionnelle et le niveau de structuration de l’ERP.",
+      "type_reponse": "single_choice",
+      "choices": [
+        {"label": "Aucun ERP", "score": 0},
+        {"label": "ERP en place avec fonctionnalités de base limitées", "score": 1},
+        {"label": "ERP couvrant plusieurs fonctions clés (finance, logistique...)", "score": 2},
+        {"label": "ERP largement déployé avec processus standardisés", "score": 3},
+        {"label": "ERP optimisé, intégré et piloté avec indicateurs", "score": 4}
+      ],
+      "poids": 3,
+      "niveau": 1,
+      "applicability_rule": "only_if(APP_ERP_001 == 'Oui')",
+      "na_allowed": true,
+      "score_mode": "exclude_if_na",
+	  "excel_line_ref":1,
+	  "valeur_donnee": "Opérationnelle",
+	  "domaine_principal": "Fondation opérationnelle du business",
+	  "description_domaine_principal": "La donnée dans ce domaine sert principalement à exécuter les opérations courantes (ERP, CRM, gestion des stocks, etc.), assurant le bon fonctionnement quotidien de l’entreprise.",
+	  "domaine_specifique": "Systèmes de base",
+	  "description_domaine_specifique": "Implémentation de l’ERP : Mise en place d’un système de planification des ressources de l’entreprise pour gérer les aspects financiers, logistiques et RH de base. CRM pour la Gestion Client : Déploiement d’un système de gestion de la relation client",
+	  "niveau_label": "niveau 1 : Mise en place initiale", 
+	  "niveau_scorecard": 1, 
+	  "description_niveau": "Les systèmes de base (ERP, CRM, systèmes verticaux) sont mis en place, mais de manière minimale, avec des fonctionnalités de base. L’ERP et le CRM sont en place pour gérer les aspects critiques des opérations quotidiennes, mais ils ne sont pas nécessairem",
+	  "outils_necessaires":  ["ERP et CRM opérationnels pour les fonctions de base","Documentation de processus standard pour l’utilisation basique des systèmes"],
+	  "outils_optionnels": ["Formation initiale des utilisateurs pour garantir une utilisation cohérente",  "Documentation des exigences métiers pour chaque système"],
+	  "pre_requis_metier": "Aucun",
+	  "dependances_inter_domaines": "Dépend d’une première mise en place des systèmes (ERP, CRM) pour l’intégration ultérieure.",
+	  "conditions_progression": "Atteindre 70% de completion pour assurer que les systèmes répondent aux besoins opérationnels de base.",
+	  "contrainte_globale": "Aucun, mais dépendra de la montée en niveau des systèmes ERP/CRM pour l’intégration dans les autres domaines.",
+	  "ordre_domaine_principal": 1,
+	  "ordre_domaine_specifique": 1,
+	  "ordre_niveau": 1,
+      "llm_context": {
+        "description": "Capacité de gestion des opérations via ERP.",
+        "objectif": "Mesurer la maturité opérationnelle structurée."
+      }
+    },
+
+    {
+      "question_id": "CAP_ERP_002",
+      "parent_question_id": "CAP_ERP_001",
+      "question_type": "scored",
+      "question_label": "Les processus ERP sont-ils documentés et standardisés ?",
+      "question_help": "Inclut procédures, workflows et règles d’utilisation.",
+      "type_reponse": "single_choice",
+      "choices": [
+        {"label": "Aucune documentation", "score": 0},
+        {"label": "Documentation partielle ou informelle", "score": 1},
+        {"label": "Documentation existante mais non standardisée", "score": 2},
+        {"label": "Documentation standardisée et utilisée", "score": 3},
+        {"label": "Documentation maintenue et améliorée en continu", "score": 4}
+      ],
+      "poids": 2,
+      "niveau": 2,
+      "applicability_rule": "only_if(APP_ERP_001 == 'Oui')",
+      "na_allowed": true,
+      "score_mode": "exclude_if_na",
+	  "excel_line_ref":1,
+	  "valeur_donnee": "Opérationnelle",
+	  "domaine_principal": "Fondation opérationnelle du business",
+	  "description_domaine_principal": "La donnée dans ce domaine sert principalement à exécuter les opérations courantes (ERP, CRM, gestion des stocks, etc.), assurant le bon fonctionnement quotidien de l’entreprise.",
+	  "domaine_specifique": "Systèmes de base",
+	  "description_domaine_specifique": "Implémentation de l’ERP : Mise en place d’un système de planification des ressources de l’entreprise pour gérer les aspects financiers, logistiques et RH de base. CRM pour la Gestion Client : Déploiement d’un système de gestion de la relation client",
+	  "niveau_label": "niveau 1 : Mise en place initiale", 
+	  "niveau_scorecard": 1, 
+	  "description_niveau": "Les systèmes de base (ERP, CRM, systèmes verticaux) sont mis en place, mais de manière minimale, avec des fonctionnalités de base. L’ERP et le CRM sont en place pour gérer les aspects critiques des opérations quotidiennes, mais ils ne sont pas nécessairem",
+	  "outils_necessaires":  ["ERP et CRM opérationnels pour les fonctions de base","Documentation de processus standard pour l’utilisation basique des systèmes"],
+	  "outils_optionnels": ["Formation initiale des utilisateurs pour garantir une utilisation cohérente",  "Documentation des exigences métiers pour chaque système"],
+	  "pre_requis_metier": "Aucun",
+	  "dependances_inter_domaines": "Dépend d’une première mise en place des systèmes (ERP, CRM) pour l’intégration ultérieure.",
+	  "conditions_progression": "Atteindre 70% de completion pour assurer que les systèmes répondent aux besoins opérationnels de base.",
+	  "contrainte_globale": "Aucun, mais dépendra de la montée en niveau des systèmes ERP/CRM pour l’intégration dans les autres domaines.",
+	  "ordre_domaine_principal": 1,
+	  "ordre_domaine_specifique": 1,
+	  "ordre_niveau": 1,
+      "llm_context": {
+        "description": "Formalisation des processus ERP.",
+        "objectif": "Mesurer la robustesse opérationnelle."
+      }
+    },
+
+    {
+      "question_id": "EVID_ERP_001",
+      "parent_question_id": "CAP_ERP_001",
+      "question_type": "evidence",
+      "question_label": "Quels éléments prouvent l’utilisation de l’ERP ?",
+      "question_help": "Exemples : captures d’écran, documentation, rapports, workflows.",
+      "type_reponse": "text",
+      "choices": [],
+      "poids": 0,
+      "niveau": 2,
+      "applicability_rule": "only_if(APP_ERP_001 == 'Oui')",
+      "na_allowed": true,
+      "score_mode": "normal",
+	  "excel_line_ref":1,
+	  "valeur_donnee": "Opérationnelle",
+	  "domaine_principal": "Fondation opérationnelle du business",
+	  "description_domaine_principal": "La donnée dans ce domaine sert principalement à exécuter les opérations courantes (ERP, CRM, gestion des stocks, etc.), assurant le bon fonctionnement quotidien de l’entreprise.",
+	  "domaine_specifique": "Systèmes de base",
+	  "description_domaine_specifique": "Implémentation de l’ERP : Mise en place d’un système de planification des ressources de l’entreprise pour gérer les aspects financiers, logistiques et RH de base. CRM pour la Gestion Client : Déploiement d’un système de gestion de la relation client",
+	  "niveau_label": "niveau 1 : Mise en place initiale", 
+	  "niveau_scorecard": 1, 
+	  "description_niveau": "Les systèmes de base (ERP, CRM, systèmes verticaux) sont mis en place, mais de manière minimale, avec des fonctionnalités de base. L’ERP et le CRM sont en place pour gérer les aspects critiques des opérations quotidiennes, mais ils ne sont pas nécessairem",
+	  "outils_necessaires":  ["ERP et CRM opérationnels pour les fonctions de base","Documentation de processus standard pour l’utilisation basique des systèmes"],
+	  "outils_optionnels": ["Formation initiale des utilisateurs pour garantir une utilisation cohérente",  "Documentation des exigences métiers pour chaque système"],
+	  "pre_requis_metier": "Aucun",
+	  "dependances_inter_domaines": "Dépend d’une première mise en place des systèmes (ERP, CRM) pour l’intégration ultérieure.",
+	  "conditions_progression": "Atteindre 70% de completion pour assurer que les systèmes répondent aux besoins opérationnels de base.",
+	  "contrainte_globale": "Aucun, mais dépendra de la montée en niveau des systèmes ERP/CRM pour l’intégration dans les autres domaines.",
+	  "ordre_domaine_principal": 1,
+	  "ordre_domaine_specifique": 1,
+	  "ordre_niveau": 1,
+      "llm_context": {
+        "description": "Preuve d’implémentation ERP.",
+        "objectif": "Valider les réponses déclaratives."
+      }
+    },
+
+    {
+      "question_id": "APP_CRM_001",
+      "parent_question_id": null,
+      "question_type": "applicability",
+      "question_label": "Un système CRM est-il pertinent pour votre activité ?",
+      "question_help": "Un CRM est pertinent si vous gérez une relation client structurée (vente, marketing, support).",
+      "type_reponse": "single_choice",
+      "choices": [
+        {"label": "Oui", "score": 0},
+        {"label": "Non", "score": 0}
+      ],
+      "poids": 0,
+      "niveau": 0,
+      "applicability_rule": "always",
+      "na_allowed": false,
+      "score_mode": "normal",
+	  "excel_line_ref":1,
+	  "valeur_donnee": "Opérationnelle",
+	  "domaine_principal": "Fondation opérationnelle du business",
+	  "description_domaine_principal": "La donnée dans ce domaine sert principalement à exécuter les opérations courantes (ERP, CRM, gestion des stocks, etc.), assurant le bon fonctionnement quotidien de l’entreprise.",
+	  "domaine_specifique": "Systèmes de base",
+	  "description_domaine_specifique": "Implémentation de l’ERP : Mise en place d’un système de planification des ressources de l’entreprise pour gérer les aspects financiers, logistiques et RH de base. CRM pour la Gestion Client : Déploiement d’un système de gestion de la relation client",
+	  "niveau_label": "niveau 1 : Mise en place initiale", 
+	  "niveau_scorecard": 1, 
+	  "description_niveau": "Les systèmes de base (ERP, CRM, systèmes verticaux) sont mis en place, mais de manière minimale, avec des fonctionnalités de base. L’ERP et le CRM sont en place pour gérer les aspects critiques des opérations quotidiennes, mais ils ne sont pas nécessairem",
+	  "outils_necessaires":  ["ERP et CRM opérationnels pour les fonctions de base","Documentation de processus standard pour l’utilisation basique des systèmes"],
+	  "outils_optionnels": ["Formation initiale des utilisateurs pour garantir une utilisation cohérente",  "Documentation des exigences métiers pour chaque système"],
+	  "pre_requis_metier": "Aucun",
+	  "dependances_inter_domaines": "Dépend d’une première mise en place des systèmes (ERP, CRM) pour l’intégration ultérieure.",
+	  "conditions_progression": "Atteindre 70% de completion pour assurer que les systèmes répondent aux besoins opérationnels de base.",
+	  "contrainte_globale": "Aucun, mais dépendra de la montée en niveau des systèmes ERP/CRM pour l’intégration dans les autres domaines.",
+	  "ordre_domaine_principal": 1,
+	  "ordre_domaine_specifique": 1,
+	  "ordre_niveau": 1,
+      "llm_context": {
+        "description": "Applicabilité CRM.",
+        "objectif": "Éviter biais scoring CRM."
+      }
+    },
+
+    {
+      "question_id": "CAP_CRM_001",
+      "parent_question_id": null,
+      "question_type": "scored",
+      "question_label": "Quel est le niveau de mise en place de votre CRM ?",
+      "question_help": "Évalue la structuration de la gestion client.",
+      "type_reponse": "single_choice",
+      "choices": [
+        {"label": "Aucun CRM", "score": 0},
+        {"label": "CRM basique utilisé ponctuellement", "score": 1},
+        {"label": "CRM utilisé pour plusieurs processus (vente, support)", "score": 2},
+        {"label": "CRM structuré avec processus définis", "score": 3},
+        {"label": "CRM piloté avec KPIs et automatisations", "score": 4}
+      ],
+      "poids": 3,
+      "niveau": 1,
+      "applicability_rule": "only_if(APP_CRM_001 == 'Oui')",
+      "na_allowed": true,
+      "score_mode": "exclude_if_na",
+	  "excel_line_ref":1,
+	  "valeur_donnee": "Opérationnelle",
+	  "domaine_principal": "Fondation opérationnelle du business",
+	  "description_domaine_principal": "La donnée dans ce domaine sert principalement à exécuter les opérations courantes (ERP, CRM, gestion des stocks, etc.), assurant le bon fonctionnement quotidien de l’entreprise.",
+	  "domaine_specifique": "Systèmes de base",
+	  "description_domaine_specifique": "Implémentation de l’ERP : Mise en place d’un système de planification des ressources de l’entreprise pour gérer les aspects financiers, logistiques et RH de base. CRM pour la Gestion Client : Déploiement d’un système de gestion de la relation client",
+	  "niveau_label": "niveau 1 : Mise en place initiale", 
+	  "niveau_scorecard": 1, 
+	  "description_niveau": "Les systèmes de base (ERP, CRM, systèmes verticaux) sont mis en place, mais de manière minimale, avec des fonctionnalités de base. L’ERP et le CRM sont en place pour gérer les aspects critiques des opérations quotidiennes, mais ils ne sont pas nécessairem",
+	  "outils_necessaires":  ["ERP et CRM opérationnels pour les fonctions de base","Documentation de processus standard pour l’utilisation basique des systèmes"],
+	  "outils_optionnels": ["Formation initiale des utilisateurs pour garantir une utilisation cohérente",  "Documentation des exigences métiers pour chaque système"],
+	  "pre_requis_metier": "Aucun",
+	  "dependances_inter_domaines": "Dépend d’une première mise en place des systèmes (ERP, CRM) pour l’intégration ultérieure.",
+	  "conditions_progression": "Atteindre 70% de completion pour assurer que les systèmes répondent aux besoins opérationnels de base.",
+	  "contrainte_globale": "Aucun, mais dépendra de la montée en niveau des systèmes ERP/CRM pour l’intégration dans les autres domaines.",
+	  "ordre_domaine_principal": 1,
+	  "ordre_domaine_specifique": 1,
+	  "ordre_niveau": 1,
+      "llm_context": {
+        "description": "Gestion de la relation client.",
+        "objectif": "Mesurer la maturité commerciale et relationnelle."
+      }
+    },
+
+    {
+      "question_id": "CAP_CRM_002",
+      "parent_question_id": "CAP_CRM_001",
+      "question_type": "scored",
+      "question_label": "Les utilisateurs sont-ils formés à l’utilisation du CRM ?",
+      "question_help": "Inclut formation initiale et continue.",
+      "type_reponse": "single_choice",
+      "choices": [
+        {"label": "Aucune formation", "score": 0},
+        {"label": "Formation ponctuelle", "score": 1},
+        {"label": "Formation initiale structurée", "score": 2},
+        {"label": "Formation régulière organisée", "score": 3},
+        {"label": "Formation continue avec suivi des usages", "score": 4}
+      ],
+      "poids": 2,
+      "niveau": 2,
+      "applicability_rule": "only_if(APP_CRM_001 == 'Oui')",
+      "na_allowed": true,
+      "score_mode": "exclude_if_na",
+      "llm_context": {
+        "description": "Adoption CRM.",
+        "objectif": "Mesurer usage réel vs outil dormant."
+      }
+    },
+    {
+      "question_id": "APP_VERT_001",
+      "parent_question_id": null,
+      "question_type": "applicability",
+      "question_label": "Utilisez-vous des systèmes métiers spécifiques (stocks, production, comptabilité, etc.) ?",
+      "question_help": "Inclut tout système autre que ERP ou CRM utilisé pour gérer une fonction métier spécifique.",
+      "type_reponse": "single_choice",
+      "choices": [
+        {"label": "Oui", "score": 0},
+        {"label": "Non", "score": 0}
+      ],
+      "poids": 0,
+      "niveau": 0,
+      "applicability_rule": "always",
+      "na_allowed": false,
+      "score_mode": "normal",
+      "llm_context": {
+        "description": "Détermine si les systèmes verticaux doivent être pris en compte.",
+        "objectif": "Éviter de biaiser l’évaluation de l’intégration."
+      }
+    },
+
+    {
+      "question_id": "CAP_INT_001",
+      "parent_question_id": null,
+      "question_type": "scored",
+      "question_label": "Quel est le niveau d’intégration entre vos systèmes (ERP, CRM, systèmes métiers) ?",
+      "question_help": "Évalue la circulation des données entre systèmes et la réduction des silos.",
+      "type_reponse": "single_choice",
+      "choices": [
+        {"label": "Aucune intégration (systèmes isolés)", "score": 0},
+        {"label": "Quelques échanges manuels ou fichiers (CSV, Excel)", "score": 1},
+        {"label": "Intégrations partielles entre certains systèmes", "score": 2},
+        {"label": "Intégration structurée couvrant la majorité des flux critiques", "score": 3},
+        {"label": "Intégration complète, automatisée et pilotée", "score": 4}
+      ],
+      "poids": 4,
+      "niveau": 2,
+      "applicability_rule": "always",
+      "na_allowed": false,
+      "score_mode": "normal",
+      "llm_context": {
+        "description": "Capacité d’intégration inter-systèmes.",
+        "objectif": "Mesurer la fluidité des flux de données."
+      }
+    },
+
+    {
+      "question_id": "CAP_INT_002",
+      "parent_question_id": "CAP_INT_001",
+      "question_type": "scored",
+      "question_label": "Quelle est la couverture des intégrations entre vos systèmes ?",
+      "question_help": "Évalue le nombre de flux critiques réellement intégrés (ex : client, commande, facturation).",
+      "type_reponse": "single_choice",
+      "choices": [
+        {"label": "Aucun flux intégré", "score": 0},
+        {"label": "Moins de 50% des flux critiques intégrés", "score": 1},
+        {"label": "Environ 50% des flux critiques intégrés", "score": 2},
+        {"label": "Plus de 80% des flux critiques intégrés", "score": 3},
+        {"label": "Tous les flux critiques sont intégrés et synchronisés", "score": 4}
+      ],
+      "poids": 3,
+      "niveau": 2,
+      "applicability_rule": "always",
+      "na_allowed": false,
+      "score_mode": "normal",
+      "llm_context": {
+        "description": "Mesure objective de couverture.",
+        "objectif": "Remplacer le '80% completion' flou."
+      }
+    },
+
+    {
+      "question_id": "CAP_INT_003",
+      "parent_question_id": "CAP_INT_001",
+      "question_type": "scored",
+      "question_label": "Les flux inter-systèmes sont-ils documentés ?",
+      "question_help": "Inclut workflows, mappings, règles d’échange.",
+      "type_reponse": "single_choice",
+      "choices": [
+        {"label": "Aucune documentation", "score": 0},
+        {"label": "Documentation partielle", "score": 1},
+        {"label": "Documentation existante mais non standardisée", "score": 2},
+        {"label": "Documentation standardisée et utilisée", "score": 3},
+        {"label": "Documentation maintenue automatiquement ou versionnée", "score": 4}
+      ],
+      "poids": 2,
+      "niveau": 2,
+      "applicability_rule": "always",
+      "na_allowed": false,
+      "score_mode": "normal",
+      "llm_context": {
+        "description": "Documentation des intégrations.",
+        "objectif": "Assurer maintenabilité."
+      }
+    },
+
+    {
+      "question_id": "CAP_INT_004",
+      "parent_question_id": "CAP_INT_001",
+      "question_type": "scored",
+      "question_label": "Les intégrations sont-elles supervisées et les incidents suivis ?",
+      "question_help": "Inclut logs, alertes, gestion des erreurs.",
+      "type_reponse": "single_choice",
+      "choices": [
+        {"label": "Aucun suivi", "score": 0},
+        {"label": "Suivi manuel en cas de problème", "score": 1},
+        {"label": "Logs disponibles mais peu exploités", "score": 2},
+        {"label": "Supervision active avec alertes", "score": 3},
+        {"label": "Monitoring avancé avec KPI et amélioration continue", "score": 4}
+      ],
+      "poids": 3,
+      "niveau": 2,
+      "applicability_rule": "always",
+      "na_allowed": false,
+      "score_mode": "normal",
+      "llm_context": {
+        "description": "Supervision des flux.",
+        "objectif": "Mesurer la robustesse opérationnelle."
+      }
+    },
+    {
+      "question_id": "EVID_INT_001",
+      "parent_question_id": "CAP_INT_001",
+      "question_type": "evidence",
+      "question_label": "Quels éléments prouvent l’intégration entre vos systèmes ?",
+      "question_help": "Exemples : schémas d’architecture, API, ETL, logs, documentation.",
+      "type_reponse": "text",
+      "choices": [],
+      "poids": 0,
+      "niveau": 2,
+      "applicability_rule": "always",
+      "na_allowed": false,
+      "score_mode": "normal",
+      "llm_context": {
+        "description": "Validation des intégrations.",
+        "objectif": "Éviter déclaratif sans preuve."
+      }
+    },
+    {
+      "question_id": "CAP_AUTO_001",
+      "parent_question_id": null,
+      "question_type": "scored",
+      "question_label": "Quel est le niveau d’automatisation de vos processus métiers entre systèmes ?",
+      "question_help": "Évalue la capacité à exécuter des processus sans intervention manuelle entre ERP, CRM et systèmes métiers.",
+      "type_reponse": "single_choice",
+      "choices": [
+        {"label": "Aucune automatisation (processus manuels)", "score": 0},
+        {"label": "Automatisation limitée à quelques tâches simples", "score": 1},
+        {"label": "Automatisation partielle de certains processus clés", "score": 2},
+        {"label": "Automatisation étendue couvrant la majorité des processus critiques", "score": 3},
+        {"label": "Automatisation complète avec orchestration intelligente", "score": 4}
+      ],
+      "poids": 4,
+      "niveau": 3,
+      "applicability_rule": "always",
+      "na_allowed": false,
+      "score_mode": "normal",
+      "llm_context": {
+        "description": "Automatisation inter-systèmes.",
+        "objectif": "Mesurer la réduction du travail manuel."
+      }
+    },
+
+    {
+      "question_id": "CAP_AUTO_002",
+      "parent_question_id": "CAP_AUTO_001",
+      "question_type": "scored",
+      "question_label": "Quel est le niveau d’orchestration des workflows entre systèmes ?",
+      "question_help": "Inclut pipelines, ETL, orchestrateurs ou moteurs de workflow.",
+      "type_reponse": "single_choice",
+      "choices": [
+        {"label": "Aucune orchestration", "score": 0},
+        {"label": "Orchestration basique (scripts, tâches planifiées)", "score": 1},
+        {"label": "Orchestration structurée (ETL, workflows définis)", "score": 2},
+        {"label": "Orchestration centralisée et supervisée", "score": 3},
+        {"label": "Orchestration dynamique et adaptative (event-driven, etc.)", "score": 4}
+      ],
+      "poids": 3,
+      "niveau": 3,
+      "applicability_rule": "always",
+      "na_allowed": false,
+      "score_mode": "normal",
+      "llm_context": {
+        "description": "Orchestration technique.",
+        "objectif": "Mesurer la maturité des flux."
+      }
+    },
+    {
+      "question_id": "CAP_AUTO_003",
+      "parent_question_id": "CAP_AUTO_001",
+      "question_type": "scored",
+      "question_label": "Utilisez-vous des outils d’automatisation métier (ex : RPA) ?",
+      "question_help": "Automatisation de tâches répétitives côté utilisateur.",
+      "type_reponse": "single_choice",
+      "choices": [
+        {"label": "Aucun usage", "score": 0},
+        {"label": "Usage ponctuel", "score": 1},
+        {"label": "Usage structuré sur plusieurs processus", "score": 2},
+        {"label": "Usage étendu et industrialisé", "score": 3},
+        {"label": "Usage optimisé et intégré à l’architecture globale", "score": 4}
+      ],
+      "poids": 1,
+      "niveau": 3,
+      "applicability_rule": "always",
+      "na_allowed": true,
+      "score_mode": "normal",
+      "llm_context": {
+        "description": "Automatisation côté métier.",
+        "objectif": "Ne pas surpondérer RPA."
+      }
+    },
+    {
+      "question_id": "CAP_OBS_001",
+      "parent_question_id": null,
+      "question_type": "scored",
+      "question_label": "Quel est le niveau de monitoring de vos systèmes et flux de données ?",
+      "question_help": "Inclut logs, alertes, supervision temps réel.",
+      "type_reponse": "single_choice",
+      "choices": [
+        {"label": "Aucun monitoring", "score": 0},
+        {"label": "Monitoring basique (logs)", "score": 1},
+        {"label": "Monitoring avec alertes", "score": 2},
+        {"label": "Monitoring centralisé en temps réel", "score": 3},
+        {"label": "Observabilité avancée avec analyse proactive", "score": 4}
+      ],
+      "poids": 4,
+      "niveau": 3,
+      "applicability_rule": "always",
+      "na_allowed": false,
+      "score_mode": "normal",
+      "llm_context": {
+        "description": "Supervision des systèmes.",
+        "objectif": "Mesurer la robustesse."
+      }
+    },
+
+    {
+      "question_id": "CAP_OBS_002",
+      "parent_question_id": "CAP_OBS_001",
+      "question_type": "scored",
+      "question_label": "Des KPI sont-ils définis pour piloter les performances des systèmes ?",
+      "question_help": "Exemples : temps de traitement, taux d’erreur, SLA.",
+      "type_reponse": "single_choice",
+      "choices": [
+        {"label": "Aucun KPI", "score": 0},
+        {"label": "Quelques indicateurs non suivis régulièrement", "score": 1},
+        {"label": "KPI définis mais peu exploités", "score": 2},
+        {"label": "KPI suivis régulièrement", "score": 3},
+        {"label": "KPI intégrés dans la prise de décision", "score": 4}
+      ],
+      "poids": 3,
+      "niveau": 3,
+      "applicability_rule": "always",
+      "na_allowed": false,
+      "score_mode": "normal",
+      "llm_context": {
+        "description": "Pilotage par la donnée.",
+        "objectif": "Mesurer maturité décisionnelle."
+      }
+    },
+    {
+      "question_id": "EVID_AUTO_001",
+      "parent_question_id": "CAP_AUTO_001",
+      "question_type": "evidence",
+      "question_label": "Quels éléments prouvent l’automatisation et l’orchestration des processus ?",
+      "question_help": "Exemples : workflows, pipelines, scripts, outils RPA.",
+      "type_reponse": "text",
+      "choices": [],
+      "poids": 0,
+      "niveau": 3,
+      "applicability_rule": "always",
+      "na_allowed": false,
+      "score_mode": "normal",
+      "llm_context": {
+        "description": "Validation de l’automatisation.",
+        "objectif": "Éviter le déclaratif."
+      }
+    },
+
+    {
+      "question_id": "EVID_OBS_001",
+      "parent_question_id": "CAP_OBS_001",
+      "question_type": "evidence",
+      "question_label": "Quels éléments prouvent le monitoring et le pilotage des systèmes ?",
+      "question_help": "Exemples : dashboards, alertes, logs, SLA.",
+      "type_reponse": "text",
+      "choices": [],
+      "poids": 0,
+      "niveau": 3,
+      "applicability_rule": "always",
+      "na_allowed": false,
+      "score_mode": "normal",
+      "llm_context": {
+        "description": "Preuve d’observabilité.",
+        "objectif": "Valider la maturité technique."
+      }
+    },
+    {
+      "question_id": "CAP_ORG_001",
+      "parent_question_id": null,
+      "question_type": "scored",
+      "question_label": "Comment les données sont-elles organisées entre les différents services ?",
+      "question_help": "Évalue le niveau de centralisation ou de fragmentation des données dans l’organisation.",
+      "type_reponse": "single_choice",
+      "choices": [
+        {"label": "Chaque service gère ses données de manière totalement isolée", "score": 0},
+        {"label": "Quelques échanges existent mais restent informels", "score": 1},
+        {"label": "Certaines données sont partagées entre services", "score": 2},
+        {"label": "Les données sont partiellement centralisées avec des règles communes", "score": 3},
+        {"label": "Les données sont centralisées et gouvernées à l’échelle de l’entreprise", "score": 4}
+      ],
+      "poids": 4,
+      "niveau": 1,
+      "applicability_rule": "always",
+      "na_allowed": false,
+      "score_mode": "normal",
+      "llm_context": {
+        "description": "Organisation des données (silos vs centralisation).",
+        "objectif": "Identifier le niveau de fragmentation des données."
+      }
+    },
+
+    {
+      "question_id": "CAP_STD_001",
+      "parent_question_id": null,
+      "question_type": "scored",
+      "question_label": "Existe-t-il des standards pour la gestion et la documentation des données ?",
+      "question_help": "Inclut conventions de nommage, formats, documentation, règles communes.",
+      "type_reponse": "single_choice",
+      "choices": [
+        {"label": "Aucun standard", "score": 0},
+        {"label": "Standards informels ou propres à chaque équipe", "score": 1},
+        {"label": "Certains standards définis mais non appliqués partout", "score": 2},
+        {"label": "Standards définis et appliqués dans la majorité des cas", "score": 3},
+        {"label": "Standards formalisés, appliqués et contrôlés", "score": 4}
+      ],
+      "poids": 3,
+      "niveau": 1,
+      "applicability_rule": "always",
+      "na_allowed": false,
+      "score_mode": "normal",
+      "llm_context": {
+        "description": "Standardisation des pratiques data.",
+        "objectif": "Préparer l’intégration future."
+      }
+    },
+    {
+      "question_id": "CAP_REP_001",
+      "parent_question_id": null,
+      "question_type": "scored",
+      "question_label": "Comment les rapports opérationnels sont-ils produits ?",
+      "question_help": "Évalue la structuration et le partage du reporting.",
+      "type_reponse": "single_choice",
+      "choices": [
+        {"label": "Rapports produits localement sans partage", "score": 0},
+        {"label": "Rapports locaux avec partage ponctuel", "score": 1},
+        {"label": "Certains rapports sont mutualisés entre équipes", "score": 2},
+        {"label": "Reporting structuré avec référentiels communs", "score": 3},
+        {"label": "Reporting centralisé avec gouvernance et cohérence globale", "score": 4}
+      ],
+      "poids": 3,
+      "niveau": 1,
+      "applicability_rule": "always",
+      "na_allowed": false,
+      "score_mode": "normal",
+      "llm_context": {
+        "description": "Maturité du reporting opérationnel.",
+        "objectif": "Mesurer la transition du local vers le global."
+      }
+    },
+    {
+      "question_id": "EVID_DOC_001",
+      "parent_question_id": "CAP_STD_001",
+      "question_type": "evidence",
+      "question_label": "Quels éléments documentent la gestion des données ou des rapports ?",
+      "question_help": "Exemples : procédures, guides, fichiers de suivi.",
+      "type_reponse": "text",
+      "choices": [],
+      "poids": 0,
+      "niveau": 1,
+      "applicability_rule": "always",
+      "na_allowed": true,
+      "score_mode": "normal",
+      "llm_context": {
+        "description": "Preuve de standardisation.",
+        "objectif": "Valider l’existence de pratiques formalisées."
+      }
+    },
+    {
+      "question_id": "EVID_REP_001",
+      "parent_question_id": "CAP_REP_001",
+      "question_type": "evidence",
+      "question_label": "Quels outils utilisez-vous pour produire vos rapports ?",
+      "question_help": "Exemples : Excel, outils BI, fichiers partagés.",
+      "type_reponse": "text",
+      "choices": [],
+      "poids": 0,
+      "niveau": 1,
+      "applicability_rule": "always",
+      "na_allowed": true,
+      "score_mode": "normal",
+      "llm_context": {
+        "description": "Preuve des outils de reporting.",
+        "objectif": "Qualifier le niveau technologique."
+      }
+    },
+    {
+      "question_id": "CAP_STD_002",
+      "parent_question_id": null,
+      "question_type": "scored",
+      "question_label": "Dans quelle mesure les standards de données sont-ils appliqués entre les services ?",
+      "question_help": "Évalue l’adoption réelle de formats communs, conventions et règles de gestion des données.",
+      "type_reponse": "single_choice",
+      "choices": [
+        {"label": "Aucun standard commun", "score": 0},
+        {"label": "Standards définis mais peu utilisés", "score": 1},
+        {"label": "Standards utilisés dans certains services", "score": 2},
+        {"label": "Standards largement adoptés", "score": 3},
+        {"label": "Standards appliqués, contrôlés et maintenus", "score": 4}
+      ],
+      "poids": 4,
+      "niveau": 2,
+      "applicability_rule": "always",
+      "na_allowed": false,
+      "score_mode": "normal",
+	  "excel_line_ref":4,
+	  "valeur_donnee": "Opérationnelle",
+	  "domaine_principal": "Fondation opérationnelle du business",
+	  "description_domaine_principal": "La donnée dans ce domaine sert principalement à exécuter les opérations courantes (ERP, CRM, gestion des stocks, etc.), assurant le bon fonctionnement quotidien de l’entreprise.",
+	  "domaine_specifique": "Gestion autonome isolée des données",
+	  "description_domaine_specifique": "Silos de Données : Chaque service (ventes, production, finance) gère ses données de manière autonome, souvent sans coordination avec les autres départements.Reporting Opérationnel Local : Les équipes créent des rapports locaux pour des besoins spécifiques sans objectif de partage ou de centralisation.",
+	  "niveau_label": "niveau 1: Gestion Décentralisée Basique", 
+	  "niveau_scorecard": 1, 
+	  "description_niveau": " Chaque service gère ses propres données de manière isolée, sans standardisation des pratiques ni coordination interservices. Les rapports sont générés localement pour répondre à des besoins immédiats, souvent sans documentation formelle.",
+	  "outils_necessaires":  ["Procédure de création de rapports locaux pour chaque service.","Outils de reporting basiques (ex. : Excel) utilisés indépendamment par chaque département."],
+	  "outils_optionnels": ["Fiches de suivi des rapports créés par chaque équipe.","Guides d’utilisation des outils de reporting pour chaque service."],
+	  "pre_requis_metier": "Aucun",
+	  "dependances_inter_domaines": "Nécessaire pour le niveau de base dans Systèmes de Base pour éviter les silos et structurer les données par département.",
+	  "conditions_progression": "Score de 60% minimum en documentation et reporting local pour garantir une gestion décentralisée fonctionnelle.",
+	  "contrainte_globale": "Processus de documentation doit être standardisé pour une future intégration.",
+	  "ordre_domaine_principal": 1,
+	  "ordre_domaine_specifique": 1,
+	  "ordre_niveau": 1,
+      "llm_context": {
+        "description": "Adoption des standards de données.",
+        "objectif": "Mesurer passage de théorie → pratique."
+      }
+    },
+    {
+      "question_id": "CAP_COORD_001",
+      "parent_question_id": null,
+      "question_type": "scored",
+      "question_label": "Existe-t-il une coordination entre les services pour la gestion des données ?",
+      "question_help": "Inclut échanges réguliers, alignement sur les pratiques et partage des besoins.",
+      "type_reponse": "single_choice",
+      "choices": [
+        {"label": "Aucune coordination", "score": 0},
+        {"label": "Coordination informelle et ponctuelle", "score": 1},
+        {"label": "Coordination sur certains sujets ou projets", "score": 2},
+        {"label": "Coordination régulière entre services", "score": 3},
+        {"label": "Coordination structurée avec gouvernance claire", "score": 4}
+      ],
+      "poids": 3,
+      "niveau": 2,
+      "applicability_rule": "always",
+      "na_allowed": false,
+      "score_mode": "normal",
+      "llm_context": {
+        "description": "Coordination interservices.",
+        "objectif": "Mesurer collaboration data."
+      }
+    },
+    {
+      "question_id": "CAP_INTEROP_001",
+      "parent_question_id": null,
+      "question_type": "scored",
+      "question_label": "Les données produites par les différents services sont-elles compatibles entre elles ?",
+      "question_help": "Évalue la capacité à combiner ou comparer les données entre services sans transformation lourde.",
+      "type_reponse": "single_choice",
+      "choices": [
+        {"label": "Données incompatibles entre services", "score": 0},
+        {"label": "Compatibilité très limitée nécessitant des retraitements manuels", "score": 1},
+        {"label": "Compatibilité partielle sur certains jeux de données", "score": 2},
+        {"label": "Compatibilité élevée avec peu de retraitements nécessaires", "score": 3},
+        {"label": "Compatibilité complète avec formats et structures harmonisés", "score": 4}
+      ],
+      "poids": 4,
+      "niveau": 2,
+      "applicability_rule": "always",
+      "na_allowed": false,
+      "score_mode": "normal",
+      "llm_context": {
+        "description": "Interopérabilité des données.",
+        "objectif": "Mesurer la capacité de croisement des données."
+      }
+    },
+    {
+      "question_id": "CAP_REP_002",
+      "parent_question_id": null,
+      "question_type": "scored",
+      "question_label": "Les rapports sont-ils construits selon des modèles communs entre les services ?",
+      "question_help": "Inclut templates, indicateurs partagés, cohérence des rapports.",
+      "type_reponse": "single_choice",
+      "choices": [
+        {"label": "Rapports totalement indépendants", "score": 0},
+        {"label": "Quelques modèles communs informels", "score": 1},
+        {"label": "Modèles partagés pour certains rapports", "score": 2},
+        {"label": "Modèles standardisés pour la majorité des rapports", "score": 3},
+        {"label": "Reporting harmonisé et gouverné globalement", "score": 4}
+      ],
+      "poids": 3,
+      "niveau": 2,
+      "applicability_rule": "always",
+      "na_allowed": false,
+      "score_mode": "normal",
+      "llm_context": {
+        "description": "Standardisation du reporting.",
+        "objectif": "Mesurer cohérence des outputs."
+      }
+    },
+    {
+      "question_id": "EVID_STD_002",
+      "parent_question_id": "CAP_STD_002",
+      "question_type": "evidence",
+      "question_label": "Quels standards ou formats de données sont définis et utilisés ?",
+      "question_help": "Exemples : modèles de données, conventions de nommage, templates.",
+      "type_reponse": "text",
+      "choices": [],
+      "poids": 0,
+      "niveau": 2,
+      "applicability_rule": "always",
+      "na_allowed": true,
+      "score_mode": "normal",
+      "llm_context": {
+        "description": "Preuve de standardisation.",
+        "objectif": "Valider adoption réelle."
+      }
+    },
+    {
+      "question_id": "EVID_COORD_001",
+      "parent_question_id": "CAP_COORD_001",
+      "question_type": "evidence",
+      "question_label": "Quels mécanismes de coordination entre services existent ?",
+      "question_help": "Exemples : réunions, comités, échanges formalisés.",
+      "type_reponse": "text",
+      "choices": [],
+      "poids": 0,
+      "niveau": 2,
+      "applicability_rule": "always",
+      "na_allowed": true,
+      "score_mode": "normal",
+      "llm_context": {
+        "description": "Preuve de coordination.",
+        "objectif": "Confirmer existence réelle."
+      }
+    },
+    {
+      "question_id": "CAP_GOV_002",
+      "parent_question_id": null,
+      "question_type": "scored",
+      "question_label": "Les pratiques de gestion des données sont-elles harmonisées entre les services ?",
+      "question_help": "Évalue l’existence de pratiques communes et leur adoption à l’échelle de l’organisation.",
+      "type_reponse": "single_choice",
+      "choices": [
+        {"label": "Aucune harmonisation", "score": 0},
+        {"label": "Harmonisation partielle sur certains sujets", "score": 1},
+        {"label": "Pratiques communes définies mais peu appliquées", "score": 2},
+        {"label": "Pratiques harmonisées et appliquées dans la majorité des services", "score": 3},
+        {"label": "Pratiques centralisées, pilotées et améliorées en continu", "score": 4}
+      ],
+      "poids": 4,
+      "niveau": 3,
+      "applicability_rule": "always",
+      "na_allowed": false,
+      "score_mode": "normal",
+      "llm_context": {
+        "description": "Centralisation des pratiques.",
+        "objectif": "Mesurer l’émergence d’une gouvernance transverse."
+      }
+    },
+    {
+      "question_id": "CAP_DOC_001",
+      "parent_question_id": null,
+      "question_type": "scored",
+      "question_label": "Les flux de données et processus de reporting sont-ils documentés de manière centralisée ?",
+      "question_help": "Inclut documentation des sources, transformations et usages.",
+      "type_reponse": "single_choice",
+      "choices": [
+        {"label": "Aucune documentation", "score": 0},
+        {"label": "Documentation locale par service", "score": 1},
+        {"label": "Documentation partielle et non centralisée", "score": 2},
+        {"label": "Documentation centralisée pour la majorité des flux", "score": 3},
+        {"label": "Documentation complète, maintenue et accessible à tous", "score": 4}
+      ],
+      "poids": 5,
+      "niveau": 3,
+      "applicability_rule": "always",
+      "na_allowed": false,
+      "score_mode": "normal",
+      "llm_context": {
+        "description": "Documentation des données.",
+        "objectif": "Mesurer la compréhension globale des flux."
+      }
+    },
+    {
+      "question_id": "CAP_TOOL_001",
+      "parent_question_id": null,
+      "question_type": "scored",
+      "question_label": "Les outils de reporting sont-ils standardisés à l’échelle de l’organisation ?",
+      "question_help": "Exemple : usage commun de Power BI ou autre outil BI.",
+      "type_reponse": "single_choice",
+      "choices": [
+        {"label": "Chaque service utilise ses propres outils", "score": 0},
+        {"label": "Quelques outils communs émergent", "score": 1},
+        {"label": "Un outil principal est utilisé mais non imposé", "score": 2},
+        {"label": "Un outil standard est utilisé par la majorité des services", "score": 3},
+        {"label": "Outils standardisés, gouvernés et intégrés", "score": 4}
+      ],
+      "poids": 3,
+      "niveau": 3,
+      "applicability_rule": "always",
+      "na_allowed": false,
+      "score_mode": "normal",
+      "llm_context": {
+        "description": "Standardisation technologique.",
+        "objectif": "Mesurer homogénéité du paysage."
+      }
+    },
+    {
+      "question_id": "CAP_DQ_002",
+      "parent_question_id": null,
+      "question_type": "scored",
+      "question_label": "Existe-t-il des processus de contrôle et d’audit des données ?",
+      "question_help": "Inclut vérification, validation et suivi des anomalies.",
+      "type_reponse": "single_choice",
+      "choices": [
+        {"label": "Aucun contrôle", "score": 0},
+        {"label": "Contrôles ponctuels", "score": 1},
+        {"label": "Contrôles définis mais non systématiques", "score": 2},
+        {"label": "Contrôles réguliers et structurés", "score": 3},
+        {"label": "Audit continu avec suivi des indicateurs qualité", "score": 4}
+      ],
+      "poids": 4,
+      "niveau": 3,
+      "applicability_rule": "always",
+      "na_allowed": false,
+      "score_mode": "normal",
+      "llm_context": {
+        "description": "Qualité des données.",
+        "objectif": "Mesurer fiabilité des données."
+      }
+    },
+    {
+      "question_id": "CAP_SHARE_001",
+      "parent_question_id": null,
+      "question_type": "scored",
+      "question_label": "Les rapports sont-ils accessibles et partagés entre les services ?",
+      "question_help": "Inclut outils collaboratifs et accès aux rapports.",
+      "type_reponse": "single_choice",
+      "choices": [
+        {"label": "Aucun partage", "score": 0},
+        {"label": "Partage informel", "score": 1},
+        {"label": "Partage ponctuel via outils collaboratifs", "score": 2},
+        {"label": "Partage structuré entre services", "score": 3},
+        {"label": "Accès global avec gouvernance et sécurité", "score": 4}
+      ],
+      "poids": 3,
+      "niveau": 3,
+      "applicability_rule": "always",
+      "na_allowed": false,
+      "score_mode": "normal",
+      "llm_context": {
+        "description": "Partage de la donnée.",
+        "objectif": "Mesurer collaboration transverse."
+      }
+    },
+    {
+      "question_id": "EVID_DOC_003",
+      "parent_question_id": "CAP_DOC_001",
+      "question_type": "evidence",
+      "question_label": "Quels documents décrivent les flux de données et les processus ?",
+      "question_help": "Exemples : cartographie, documentation technique, guides.",
+      "type_reponse": "text",
+      "choices": [],
+      "poids": 0,
+      "niveau": 3,
+      "applicability_rule": "always",
+      "na_allowed": true,
+      "score_mode": "normal",
+      "llm_context": {
+        "description": "Preuve documentation.",
+        "objectif": "Valider la maturité réelle."
+      }
+    },
+    {
+      "question_id": "CAP_STORAGE_001",
+      "parent_question_id": null,
+      "question_type": "scored",
+      "question_label": "Comment les données sont-elles stockées dans votre organisation ?",
+      "question_help": "Évalue le niveau de structuration et de centralisation du stockage des données.",
+      "type_reponse": "single_choice",
+      "choices": [
+        {"label": "Stockage local non structuré (Excel, papier)", "score": 0},
+        {"label": "Stockage local structuré par service", "score": 1},
+        {"label": "Bases de données utilisées mais isolées", "score": 2},
+        {"label": "Stockage partiellement centralisé", "score": 3},
+        {"label": "Stockage centralisé et structuré", "score": 4}
+      ],
+      "poids": 4,
+      "niveau": 1,
+      "applicability_rule": "always",
+      "na_allowed": false,
+      "score_mode": "normal",
+      "llm_context": {
+        "description": "Capacité de stockage des données.",
+        "objectif": "Mesurer le socle technique."
+      }
+    },
+    {
+      "question_id": "CAP_COLLECT_001",
+      "parent_question_id": null,
+      "question_type": "scored",
+      "question_label": "Comment les données sont-elles collectées ?",
+      "question_help": "Évalue le niveau de structuration de la collecte des données.",
+      "type_reponse": "single_choice",
+      "choices": [
+        {"label": "Collecte manuelle non standardisée", "score": 0},
+        {"label": "Collecte manuelle avec quelques règles", "score": 1},
+        {"label": "Collecte structurée pour certains processus", "score": 2},
+        {"label": "Collecte standardisée pour la majorité des processus", "score": 3},
+        {"label": "Collecte automatisée et contrôlée", "score": 4}
+      ],
+      "poids": 3,
+      "niveau": 1,
+      "applicability_rule": "always",
+      "na_allowed": false,
+      "score_mode": "normal",
+      "llm_context": {
+        "description": "Collecte des données.",
+        "objectif": "Mesurer la fiabilité de la source."
+      }
+    },
+    {
+      "question_id": "CAP_STRUCT_001",
+      "parent_question_id": null,
+      "question_type": "scored",
+      "question_label": "Les données sont-elles structurées selon un modèle défini ?",
+      "question_help": "Évalue si les données suivent un schéma ou une organisation cohérente.",
+      "type_reponse": "single_choice",
+      "choices": [
+        {"label": "Aucune structuration", "score": 0},
+        {"label": "Structuration implicite dépendant des besoins locaux", "score": 1},
+        {"label": "Structuration partielle avec quelques règles", "score": 2},
+        {"label": "Structuration définie et utilisée", "score": 3},
+        {"label": "Structuration standardisée et documentée", "score": 4}
+      ],
+      "poids": 4,
+      "niveau": 1,
+      "applicability_rule": "always",
+      "na_allowed": false,
+      "score_mode": "normal",
+      "llm_context": {
+        "description": "Structuration des données.",
+        "objectif": "Préparer les usages analytiques."
+      }
+    },
+    {
+      "question_id": "CAP_TRACE_001",
+      "parent_question_id": null,
+      "question_type": "scored",
+      "question_label": "Les données collectées sont-elles documentées et traçables ?",
+      "question_help": "Inclut description des données, origine et usage.",
+      "type_reponse": "single_choice",
+      "choices": [
+        {"label": "Aucune documentation", "score": 0},
+        {"label": "Documentation minimale locale", "score": 1},
+        {"label": "Documentation partielle", "score": 2},
+        {"label": "Documentation structurée et accessible", "score": 3},
+        {"label": "Documentation complète avec traçabilité des données", "score": 4}
+      ],
+      "poids": 5,
+      "niveau": 1,
+      "applicability_rule": "always",
+      "na_allowed": false,
+      "score_mode": "normal",
+      "llm_context": {
+        "description": "Traçabilité des données.",
+        "objectif": "Garantir la compréhension et la confiance."
+      }
+    },
+    {
+      "question_id": "EVID_STORAGE_001",
+      "parent_question_id": "CAP_STORAGE_001",
+      "question_type": "evidence",
+      "question_label": "Quels types de supports ou outils sont utilisés pour stocker les données ?",
+      "question_help": "Exemples : Excel, bases de données, fichiers partagés.",
+      "type_reponse": "text",
+      "choices": [],
+      "poids": 0,
+      "niveau": 1,
+      "applicability_rule": "always",
+      "na_allowed": true,
+      "score_mode": "normal",
+      "llm_context": {
+        "description": "Preuve de stockage.",
+        "objectif": "Qualifier le niveau technique."
+      }
+    },
+    {
+      "question_id": "CAP_STRUCT_002",
+      "parent_question_id": null,
+      "question_type": "scored",
+      "question_label": "Dans quelle mesure les données sont-elles structurées selon des standards communs ?",
+      "question_help": "Évalue l’utilisation de formats ou modèles de données communs entre les services.",
+      "type_reponse": "single_choice",
+      "choices": [
+        {"label": "Aucune structuration commune", "score": 0},
+        {"label": "Structuration définie mais peu appliquée", "score": 1},
+        {"label": "Structuration appliquée dans certains services", "score": 2},
+        {"label": "Structuration appliquée dans la majorité des services", "score": 3},
+        {"label": "Structuration standardisée, appliquée et contrôlée", "score": 4}
+      ],
+      "poids": 4,
+      "niveau": 2,
+      "applicability_rule": "always",
+      "na_allowed": false,
+      "score_mode": "normal",
+      "llm_context": {
+        "description": "Structuration des données.",
+        "objectif": "Mesurer homogénéité des modèles."
+      }
+    },
+    {
+      "question_id": "CAP_DOC_002",
+      "parent_question_id": null,
+      "question_type": "scored",
+      "question_label": "La documentation des données est-elle standardisée et partagée ?",
+      "question_help": "Inclut description des colonnes, règles de gestion et usage des données.",
+      "type_reponse": "single_choice",
+      "choices": [
+        {"label": "Aucune documentation", "score": 0},
+        {"label": "Documentation locale non standardisée", "score": 1},
+        {"label": "Documentation partielle avec certains standards", "score": 2},
+        {"label": "Documentation standardisée et partagée", "score": 3},
+        {"label": "Documentation complète, maintenue et accessible à tous", "score": 4}
+      ],
+      "poids": 5,
+      "niveau": 2,
+      "applicability_rule": "always",
+      "na_allowed": false,
+      "score_mode": "normal",
+      "llm_context": {
+        "description": "Documentation des données.",
+        "objectif": "Assurer compréhension commune."
+      }
+    },
+    {
+      "question_id": "CAP_CATALOG_001",
+      "parent_question_id": null,
+      "question_type": "scored",
+      "question_label": "Existe-t-il un inventaire des données utilisées dans les différents services ?",
+      "question_help": "Inclut liste des datasets, types de données et usages.",
+      "type_reponse": "single_choice",
+      "choices": [
+        {"label": "Aucun inventaire", "score": 0},
+        {"label": "Inventaire local par service", "score": 1},
+        {"label": "Inventaire partiel", "score": 2},
+        {"label": "Inventaire global mais incomplet", "score": 3},
+        {"label": "Inventaire complet, maintenu et accessible", "score": 4}
+      ],
+      "poids": 3,
+      "niveau": 2,
+      "applicability_rule": "always",
+      "na_allowed": false,
+      "score_mode": "normal",
+      "llm_context": {
+        "description": "Catalogue de données basique.",
+        "objectif": "Mesurer visibilité des données."
+      }
+    },
+    {
+      "question_id": "CAP_RELIAB_001",
+      "parent_question_id": null,
+      "question_type": "scored",
+      "question_label": "Des mécanismes de sauvegarde des données sont-ils en place ?",
+      "question_help": "Inclut sauvegardes régulières et protection contre la perte de données.",
+      "type_reponse": "single_choice",
+      "choices": [
+        {"label": "Aucune sauvegarde", "score": 0},
+        {"label": "Sauvegardes manuelles ponctuelles", "score": 1},
+        {"label": "Sauvegardes régulières non contrôlées", "score": 2},
+        {"label": "Sauvegardes automatisées avec vérification", "score": 3},
+        {"label": "Stratégie de sauvegarde robuste avec reprise garantie", "score": 4}
+      ],
+      "poids": 3,
+      "niveau": 2,
+      "applicability_rule": "always",
+      "na_allowed": false,
+      "score_mode": "normal",
+      "llm_context": {
+        "description": "Fiabilité des données.",
+        "objectif": "Éviter perte et corruption."
+      }
+    },
+    {
+      "question_id": "EVID_DOC_004",
+      "parent_question_id": "CAP_DOC_002",
+      "question_type": "evidence",
+      "question_label": "Quels documents décrivent les données et leur structure ?",
+      "question_help": "Exemples : dictionnaire de données, fichiers de description.",
+      "type_reponse": "text",
+      "choices": [],
+      "poids": 0,
+      "niveau": 2,
+      "applicability_rule": "always",
+      "na_allowed": true,
+      "score_mode": "normal",
+      "llm_context": {
+        "description": "Preuve documentation.",
+        "objectif": "Valider existence réelle."
+      }
+    },
+    {
+      "question_id": "CAP_STORAGE_002",
+      "parent_question_id": null,
+      "question_type": "scored",
+      "question_label": "Dans quelle mesure le stockage des données est-il centralisé ?",
+      "question_help": "Évalue si les données sont regroupées dans un système cohérent ou dispersées.",
+      "type_reponse": "single_choice",
+      "choices": [
+        {"label": "Stockage entièrement dispersé", "score": 0},
+        {"label": "Quelques regroupements locaux", "score": 1},
+        {"label": "Stockage partiellement centralisé", "score": 2},
+        {"label": "Stockage centralisé pour la majorité des données", "score": 3},
+        {"label": "Stockage centralisé, structuré et gouverné", "score": 4}
+      ],
+      "poids": 5,
+      "niveau": 3,
+      "applicability_rule": "always",
+      "na_allowed": false,
+      "score_mode": "normal",
+      "llm_context": {
+        "description": "Centralisation technique.",
+        "objectif": "Mesurer maturité du socle data."
+      }
+    },
+    {
+      "question_id": "CAP_ACCESS_001",
+      "parent_question_id": null,
+      "question_type": "scored",
+      "question_label": "Les données sont-elles facilement accessibles par les différents services ?",
+      "question_help": "Évalue la facilité d’accès et la disponibilité des données pour les utilisateurs autorisés.",
+      "type_reponse": "single_choice",
+      "choices": [
+        {"label": "Accès difficile ou inexistant", "score": 0},
+        {"label": "Accès manuel sur demande", "score": 1},
+        {"label": "Accès partiel pour certains services", "score": 2},
+        {"label": "Accès structuré pour la majorité des utilisateurs", "score": 3},
+        {"label": "Accès fluide, sécurisé et en libre-service contrôlé", "score": 4}
+      ],
+      "poids": 4,
+      "niveau": 3,
+      "applicability_rule": "always",
+      "na_allowed": false,
+      "score_mode": "normal",
+      "llm_context": {
+        "description": "Accessibilité des données.",
+        "objectif": "Mesurer disponibilité réelle."
+      }
+    },
+
+    {
+      "question_id": "CAP_DOC_003",
+      "parent_question_id": null,
+      "question_type": "scored",
+      "question_label": "La documentation des données est-elle complète et maintenue à jour ?",
+      "question_help": "Inclut sources, transformations, règles de gestion et usage des données.",
+      "type_reponse": "single_choice",
+      "choices": [
+        {"label": "Documentation inexistante", "score": 0},
+        {"label": "Documentation partielle et obsolète", "score": 1},
+        {"label": "Documentation complète mais peu maintenue", "score": 2},
+        {"label": "Documentation maintenue régulièrement", "score": 3},
+        {"label": "Documentation complète, à jour et gouvernée", "score": 4}
+      ],
+      "poids": 5,
+      "niveau": 3,
+      "applicability_rule": "always",
+      "na_allowed": false,
+      "score_mode": "normal",
+      "llm_context": {
+        "description": "Documentation avancée.",
+        "objectif": "Garantir compréhension et traçabilité."
+      }
+    },
+    {
+      "question_id": "CAP_SEC_001",
+      "parent_question_id": null,
+      "question_type": "scored",
+      "question_label": "Les accès aux données sont-ils gérés et sécurisés ?",
+      "question_help": "Inclut gestion des droits, sécurité et contrôle des accès.",
+      "type_reponse": "single_choice",
+      "choices": [
+        {"label": "Aucune gestion des accès", "score": 0},
+        {"label": "Accès non contrôlés ou partiellement contrôlés", "score": 1},
+        {"label": "Gestion des accès définie mais non appliquée partout", "score": 2},
+        {"label": "Gestion des accès structurée et appliquée", "score": 3},
+        {"label": "Gestion des accès avancée avec contrôle et audit", "score": 4}
+      ],
+      "poids": 4,
+      "niveau": 3,
+      "applicability_rule": "always",
+      "na_allowed": false,
+      "score_mode": "normal",
+      "llm_context": {
+        "description": "Sécurité des données.",
+        "objectif": "Mesurer protection et gouvernance."
+      }
+    },
+    {
+      "question_id": "EVID_STORAGE_002",
+      "parent_question_id": "CAP_STORAGE_002",
+      "question_type": "evidence",
+      "question_label": "Quel système ou plateforme est utilisé pour centraliser les données ?",
+      "question_help": "Exemples : serveur central, data warehouse, cloud.",
+      "type_reponse": "text",
+      "choices": [],
+      "poids": 0,
+      "niveau": 3,
+      "applicability_rule": "always",
+      "na_allowed": true,
+      "score_mode": "normal",
+      "llm_context": {
+        "description": "Preuve de centralisation.",
+        "objectif": "Qualifier l’architecture."
+      }
+    },
+    {
+      "question_id": "CAP_PROC_001",
+      "parent_question_id": null,
+      "question_type": "scored",
+      "question_label": "Les processus métiers liés aux données sont-ils définis et structurés ?",
+      "question_help": "Évalue si les workflows métiers sont formalisés ou informels.",
+      "type_reponse": "single_choice",
+      "choices": [
+        {"label": "Processus non définis", "score": 0},
+        {"label": "Processus informels dépendant des individus", "score": 1},
+        {"label": "Processus partiellement définis", "score": 2},
+        {"label": "Processus définis et documentés", "score": 3},
+        {"label": "Processus standardisés et optimisés", "score": 4}
+      ],
+      "poids": 4,
+      "niveau": 1,
+      "applicability_rule": "always",
+      "na_allowed": false,
+      "score_mode": "normal",
+      "llm_context": {
+        "description": "Structuration des processus métiers.",
+        "objectif": "Mesurer maturité organisationnelle."
+      }
+    },
+    {
+      "question_id": "CAP_DIGI_001",
+      "parent_question_id": null,
+      "question_type": "scored",
+      "question_label": "Dans quelle mesure les processus métiers sont-ils digitalisés ?",
+      "question_help": "Évalue l’usage d’outils numériques vs papier ou email.",
+      "type_reponse": "single_choice",
+      "choices": [
+        {"label": "Processus entièrement papier ou email", "score": 0},
+        {"label": "Digitalisation très limitée", "score": 1},
+        {"label": "Digitalisation partielle", "score": 2},
+        {"label": "Processus majoritairement digitalisés", "score": 3},
+        {"label": "Processus entièrement digitalisés", "score": 4}
+      ],
+      "poids": 3,
+      "niveau": 1,
+      "applicability_rule": "always",
+      "na_allowed": false,
+      "score_mode": "normal",
+      "llm_context": {
+        "description": "Digitalisation des processus.",
+        "objectif": "Mesurer passage papier → numérique."
+      }
+    },
+    {
+      "question_id": "CAP_REP_003",
+      "parent_question_id": null,
+      "question_type": "scored",
+      "question_label": "Comment les rapports sont-ils produits par les équipes métiers ?",
+      "question_help": "Évalue le niveau de structuration et d’outillage du reporting local.",
+      "type_reponse": "single_choice",
+      "choices": [
+        {"label": "Rapports inexistants ou ponctuels", "score": 0},
+        {"label": "Rapports manuels non standardisés", "score": 1},
+        {"label": "Rapports manuels avec modèles définis", "score": 2},
+        {"label": "Rapports structurés avec outils dédiés", "score": 3},
+        {"label": "Reporting automatisé et intégré", "score": 4}
+      ],
+      "poids": 4,
+      "niveau": 1,
+      "applicability_rule": "always",
+      "na_allowed": false,
+      "score_mode": "normal",
+      "llm_context": {
+        "description": "Reporting métier.",
+        "objectif": "Mesurer maturité des usages."
+      }
+    },
+    {
+      "question_id": "CAP_AUTO_LOCAL_001",
+      "parent_question_id": null,
+      "question_type": "scored",
+      "question_label": "Existe-t-il des automatisations locales dans les processus métiers ?",
+      "question_help": "Inclut macros Excel, scripts ou automatisations simples.",
+      "type_reponse": "single_choice",
+      "choices": [
+        {"label": "Aucune automatisation", "score": 0},
+        {"label": "Automatisation très limitée", "score": 1},
+        {"label": "Automatisation sur certains processus", "score": 2},
+        {"label": "Automatisation répandue dans plusieurs processus", "score": 3},
+        {"label": "Automatisation systématique et maîtrisée", "score": 4}
+      ],
+      "poids": 2,
+      "niveau": 1,
+      "applicability_rule": "always",
+      "na_allowed": false,
+      "score_mode": "normal",
+      "llm_context": {
+        "description": "Automatisation locale.",
+        "objectif": "Mesurer efficacité opérationnelle."
+      }
+    },
+    {
+      "question_id": "EVID_PROC_001",
+      "parent_question_id": "CAP_PROC_001",
+      "question_type": "evidence",
+      "question_label": "Quels documents décrivent les processus métiers liés aux données ?",
+      "question_help": "Exemples : procédures, instructions, workflows.",
+      "type_reponse": "text",
+      "choices": [],
+      "poids": 0,
+      "niveau": 1,
+      "applicability_rule": "always",
+      "na_allowed": true,
+      "score_mode": "normal",
+      "llm_context": {
+        "description": "Preuve des processus.",
+        "objectif": "Valider structuration."
+      }
+    },
+	{
+      "question_id": "PROC_STR_001",
+      "parent_question_id": null,
+      "question_type": "scored",
+      "question_label": "Les processus métiers liés aux données sont-ils définis et structurés ?",
+      "question_help": "Évalue le niveau de formalisation des workflows métiers.",
+      "type_reponse": "single_choice",
+      "choices": [
+        {"label": "Processus inexistants ou totalement informels", "score": 0},
+        {"label": "Processus dépendants des individus", "score": 1},
+        {"label": "Processus partiellement définis", "score": 2},
+        {"label": "Processus définis et documentés", "score": 3},
+        {"label": "Processus standardisés et optimisés", "score": 4}
+      ],
+      "poids": 4,
+      "niveau": 1,
+      "applicability_rule": "always",
+      "na_allowed": false,
+      "score_mode": "normal",
+      "llm_context": {
+        "description": "Structuration des processus métiers",
+        "objectif": "Mesurer la dépendance aux individus"
+      }
+    },
+    {
+      "question_id": "PROC_DIGI_001",
+      "parent_question_id": null,
+      "question_type": "scored",
+      "question_label": "Dans quelle mesure les processus métiers sont-ils digitalisés ?",
+      "question_help": "Évalue le passage du papier/email vers des outils numériques.",
+      "type_reponse": "single_choice",
+      "choices": [
+        {"label": "Processus entièrement manuels (papier/email)", "score": 0},
+        {"label": "Digitalisation très limitée", "score": 1},
+        {"label": "Digitalisation partielle", "score": 2},
+        {"label": "Processus majoritairement digitalisés", "score": 3},
+        {"label": "Processus entièrement digitalisés", "score": 4}
+      ],
+      "poids": 3,
+      "niveau": 1,
+      "applicability_rule": "always",
+      "na_allowed": false,
+      "score_mode": "normal",
+      "llm_context": {
+        "description": "Digitalisation des processus",
+        "objectif": "Réduire les tâches manuelles"
+      }
+    },
+
+    {
+      "question_id": "PROC_REP_001",
+      "parent_question_id": null,
+      "question_type": "scored",
+      "question_label": "Comment les rapports sont-ils produits par les équipes métiers ?",
+      "question_help": "Évalue le niveau de structuration et d’outillage du reporting.",
+      "type_reponse": "single_choice",
+      "choices": [
+        {"label": "Rapports inexistants ou ponctuels", "score": 0},
+        {"label": "Rapports manuels non standardisés", "score": 1},
+        {"label": "Rapports manuels avec modèles définis", "score": 2},
+        {"label": "Rapports structurés avec outils dédiés", "score": 3},
+        {"label": "Reporting automatisé et intégré", "score": 4}
+      ],
+      "poids": 4,
+      "niveau": 1,
+      "applicability_rule": "always",
+      "na_allowed": false,
+      "score_mode": "normal",
+      "llm_context": {
+        "description": "Reporting métier",
+        "objectif": "Mesurer la maturité des usages data"
+      }
+    },
+
+    {
+      "question_id": "PROC_AUTO_001",
+      "parent_question_id": null,
+      "question_type": "scored",
+      "question_label": "Existe-t-il des automatisations locales dans les processus métiers ?",
+      "question_help": "Inclut macros Excel, scripts ou automatisations simples.",
+      "type_reponse": "single_choice",
+      "choices": [
+        {"label": "Aucune automatisation", "score": 0},
+        {"label": "Automatisation très limitée", "score": 1},
+        {"label": "Automatisation sur certains processus", "score": 2},
+        {"label": "Automatisation répandue", "score": 3},
+        {"label": "Automatisation maîtrisée et généralisée", "score": 4}
+      ],
+      "poids": 2,
+      "niveau": 1,
+      "applicability_rule": "always",
+      "na_allowed": false,
+      "score_mode": "normal",
+      "llm_context": {
+        "description": "Automatisation locale",
+        "objectif": "Améliorer l’efficacité opérationnelle"
+      }
+    },
+
+    {
+      "question_id": "PROC_EVID_001",
+      "parent_question_id": "PROC_STR_001",
+      "question_type": "evidence",
+      "question_label": "Quels documents décrivent les processus métiers ?",
+      "question_help": "Exemples : procédures, workflows, guides.",
+      "type_reponse": "text",
+      "choices": [],
+      "poids": 0,
+      "niveau": 1,
+      "applicability_rule": "always",
+      "na_allowed": true,
+      "score_mode": "normal",
+      "llm_context": {
+        "description": "Preuve des processus",
+        "objectif": "Valider la structuration réelle"
+      }
+    },
+    {
+      "question_id": "PROC_STR_001",
+      "parent_question_id": null,
+      "question_type": "scored",
+      "question_label": "Les processus métiers liés aux données sont-ils définis, documentés et standardisés ?",
+      "question_help": "Inclut la formalisation, la documentation et la standardisation des workflows métiers.",
+      "type_reponse": "single_choice",
+      "choices": [
+        {"label": "Processus inexistants ou totalement informels", "score": 0},
+        {"label": "Processus dépendants des individus", "score": 1},
+        {"label": "Processus définis et documentés pour certains cas", "score": 2},
+        {"label": "Processus standardisés et appliqués dans la majorité des cas", "score": 3},
+        {"label": "Processus optimisés, pilotés et améliorés en continu", "score": 4}
+      ],
+      "poids": 4,
+      "niveau": "progressif",
+      "applicability_rule": "always",
+      "na_allowed": false,
+      "score_mode": "normal",
+      "llm_context": {
+        "description": "Structuration et standardisation des processus",
+        "objectif": "Réduire la dépendance aux individus"
+      }
+    },
+
+    {
+      "question_id": "PROC_DIGI_001",
+      "parent_question_id": null,
+      "question_type": "scored",
+      "question_label": "Dans quelle mesure les processus métiers sont-ils digitalisés ?",
+      "question_help": "Évalue le passage du papier/email vers des outils numériques structurés.",
+      "type_reponse": "single_choice",
+      "choices": [
+        {"label": "Processus entièrement manuels (papier/email)", "score": 0},
+        {"label": "Digitalisation très limitée", "score": 1},
+        {"label": "Digitalisation partielle avec outils simples", "score": 2},
+        {"label": "Processus majoritairement digitalisés", "score": 3},
+        {"label": "Processus entièrement digitalisés et intégrés", "score": 4}
+      ],
+      "poids": 3,
+      "niveau": "progressif",
+      "applicability_rule": "always",
+      "na_allowed": false,
+      "score_mode": "normal",
+      "llm_context": {
+        "description": "Digitalisation des processus",
+        "objectif": "Améliorer efficacité opérationnelle"
+      }
+    },
+
+    {
+      "question_id": "PROC_REP_001",
+      "parent_question_id": null,
+      "question_type": "scored",
+      "question_label": "Comment les rapports métiers sont-ils produits et standardisés ?",
+      "question_help": "Évalue la structuration, la standardisation et l’outillage du reporting.",
+      "type_reponse": "single_choice",
+      "choices": [
+        {"label": "Rapports inexistants ou ponctuels", "score": 0},
+        {"label": "Rapports manuels non standardisés", "score": 1},
+        {"label": "Rapports manuels avec formats standardisés", "score": 2},
+        {"label": "Reporting structuré avec outils dédiés", "score": 3},
+        {"label": "Reporting automatisé et intégré", "score": 4}
+      ],
+      "poids": 4,
+      "niveau": "progressif",
+      "applicability_rule": "always",
+      "na_allowed": false,
+      "score_mode": "normal",
+      "llm_context": {
+        "description": "Reporting métier",
+        "objectif": "Mesurer la maturité des usages data"
+      }
+    },
+
+    {
+      "question_id": "PROC_AUTO_001",
+      "parent_question_id": null,
+      "question_type": "scored",
+      "question_label": "Quel est le niveau d’automatisation des processus métiers ?",
+      "question_help": "Inclut automatisation locale (Excel, scripts) et automatisation structurée.",
+      "type_reponse": "single_choice",
+      "choices": [
+        {"label": "Aucune automatisation", "score": 0},
+        {"label": "Automatisation très limitée", "score": 1},
+        {"label": "Automatisation locale (scripts, macros)", "score": 2},
+        {"label": "Automatisation structurée sur plusieurs processus", "score": 3},
+        {"label": "Automatisation généralisée et orchestrée", "score": 4}
+      ],
+      "poids": 3,
+      "niveau": "progressif",
+      "applicability_rule": "always",
+      "na_allowed": false,
+      "score_mode": "normal",
+      "llm_context": {
+        "description": "Automatisation métier",
+        "objectif": "Réduire les erreurs et améliorer la performance"
+      }
+    },
+
+    {
+      "question_id": "PROC_TRACE_001",
+      "parent_question_id": null,
+      "question_type": "scored",
+      "question_label": "Les processus métiers sont-ils traçables et suivis ?",
+      "question_help": "Inclut suivi des rapports, historique et traçabilité des actions.",
+      "type_reponse": "single_choice",
+      "choices": [
+        {"label": "Aucune traçabilité", "score": 0},
+        {"label": "Suivi manuel non structuré", "score": 1},
+        {"label": "Suivi partiel avec outils simples", "score": 2},
+        {"label": "Suivi structuré et documenté", "score": 3},
+        {"label": "Traçabilité complète avec indicateurs", "score": 4}
+      ],
+      "poids": 2,
+      "niveau": "progressif",
+      "applicability_rule": "always",
+      "na_allowed": false,
+      "score_mode": "normal",
+      "llm_context": {
+        "description": "Traçabilité des processus",
+        "objectif": "Sécuriser et améliorer les opérations"
+      }
+    },
+
+    {
+      "question_id": "PROC_EVID_001",
+      "parent_question_id": "PROC_STR_001",
+      "question_type": "evidence",
+      "question_label": "Quels documents ou outils décrivent les processus métiers ?",
+      "question_help": "Exemples : procédures, workflows, templates de reporting.",
+      "type_reponse": "text",
+      "choices": [],
+      "poids": 0,
+      "niveau": "support",
+      "applicability_rule": "always",
+      "na_allowed": true,
+      "score_mode": "normal"
+    },
+	 {
+      "question_id": "PROC_STR_001",
+      "question_type": "scored",
+      "question_label": "Les processus métiers liés aux données sont-ils définis, standardisés et optimisés ?",
+      "type_reponse": "single_choice",
+      "choices": [
+        {"label": "Processus inexistants ou totalement informels", "score": 0},
+        {"label": "Processus dépendants des individus", "score": 1},
+        {"label": "Processus définis et documentés pour certains cas", "score": 2},
+        {"label": "Processus standardisés et appliqués", "score": 3},
+        {"label": "Processus optimisés, mesurés et prêts à être automatisés", "score": 4}
+      ],
+      "poids": 4,
+      "niveau": "progressif",
+      "applicability_rule": "always",
+      "na_allowed": false,
+      "score_mode": "normal"
+    },
+
+    {
+      "question_id": "PROC_DIGI_001",
+      "question_type": "scored",
+      "question_label": "Dans quelle mesure les processus métiers sont-ils digitalisés et centralisés ?",
+      "type_reponse": "single_choice",
+      "choices": [
+        {"label": "Processus entièrement manuels (papier/email)", "score": 0},
+        {"label": "Digitalisation très limitée", "score": 1},
+        {"label": "Digitalisation partielle avec outils simples", "score": 2},
+        {"label": "Processus majoritairement digitalisés", "score": 3},
+        {"label": "Processus digitalisés, centralisés et interconnectés", "score": 4}
+      ],
+      "poids": 3,
+      "niveau": "progressif",
+      "applicability_rule": "always",
+      "na_allowed": false,
+      "score_mode": "normal"
+    },
+
+    {
+      "question_id": "PROC_REP_001",
+      "question_type": "scored",
+      "question_label": "Comment les rapports métiers sont-ils produits, standardisés et centralisés ?",
+      "type_reponse": "single_choice",
+      "choices": [
+        {"label": "Rapports inexistants ou ponctuels", "score": 0},
+        {"label": "Rapports manuels non standardisés", "score": 1},
+        {"label": "Rapports manuels avec formats standardisés", "score": 2},
+        {"label": "Reporting structuré avec outils dédiés", "score": 3},
+        {"label": "Reporting centralisé, structuré et prêt à être automatisé", "score": 4}
+      ],
+      "poids": 4,
+      "niveau": "progressif",
+      "applicability_rule": "always",
+      "na_allowed": false,
+      "score_mode": "normal"
+    },
+
+    {
+      "question_id": "PROC_AUTO_001",
+      "question_type": "scored",
+      "question_label": "Quel est le niveau d’automatisation des processus métiers ?",
+      "type_reponse": "single_choice",
+      "choices": [
+        {"label": "Aucune automatisation", "score": 0},
+        {"label": "Automatisation très limitée", "score": 1},
+        {"label": "Automatisation locale (scripts, macros)", "score": 2},
+        {"label": "Automatisation structurée sur plusieurs processus", "score": 3},
+        {"label": "Automatisation généralisée et orchestrée", "score": 4}
+      ],
+      "poids": 3,
+      "niveau": "progressif",
+      "applicability_rule": "always",
+      "na_allowed": false,
+      "score_mode": "normal"
+    },
+
+    {
+      "question_id": "PROC_TRACE_001",
+      "question_type": "scored",
+      "question_label": "Les processus et rapports métiers sont-ils traçables et suivis ?",
+      "type_reponse": "single_choice",
+      "choices": [
+        {"label": "Aucune traçabilité", "score": 0},
+        {"label": "Suivi manuel non structuré", "score": 1},
+        {"label": "Suivi partiel avec outils simples", "score": 2},
+        {"label": "Suivi structuré et documenté", "score": 3},
+        {"label": "Traçabilité complète avec indicateurs et contrôle qualité", "score": 4}
+      ],
+      "poids": 2,
+      "niveau": "progressif",
+      "applicability_rule": "always",
+      "na_allowed": false,
+      "score_mode": "normal"
+    },
+
+    {
+      "question_id": "PROC_EVID_001",
+      "parent_question_id": "PROC_STR_001",
+      "question_type": "evidence",
+      "question_label": "Quels documents décrivent les processus métiers et les workflows ?",
+      "type_reponse": "text",
+      "choices": [],
+      "poids": 0,
+      "niveau": "support",
+      "applicability_rule": "always",
+      "na_allowed": true,
+      "score_mode": "normal"
+    },
+	{
+      "question_id": "CULT_AWARE_001",
+      "parent_question_id": null,
+      "question_type": "scored",
+      "question_label": "Dans quelle mesure les équipes sont-elles sensibilisées à l’importance de la donnée ?",
+      "question_help": "Évalue la compréhension du rôle de la donnée dans les opérations.",
+      "type_reponse": "single_choice",
+      "choices": [
+        {"label": "Aucune sensibilisation", "score": 0},
+        {"label": "Sensibilisation limitée à certains individus", "score": 1},
+        {"label": "Sensibilisation partielle dans certaines équipes", "score": 2},
+        {"label": "Sensibilisation généralisée dans la majorité des équipes", "score": 3},
+        {"label": "Culture data intégrée dans toute l’organisation", "score": 4}
+      ],
+      "poids": 4,
+      "niveau": "progressif",
+      "applicability_rule": "always",
+      "na_allowed": false,
+      "score_mode": "normal",
+      "llm_context": {
+        "description": "Culture data",
+        "objectif": "Mesurer la maturité culturelle"
+      }
+    },
+    {
+      "question_id": "CULT_KPI_001",
+      "parent_question_id": null,
+      "question_type": "scored",
+      "question_label": "Dans quelle mesure les équipes utilisent-elles des KPI pour piloter leurs activités ?",
+      "question_help": "Évalue l’usage réel de la donnée dans la prise de décision.",
+      "type_reponse": "single_choice",
+      "choices": [
+        {"label": "Aucun suivi des KPI", "score": 0},
+        {"label": "Suivi ponctuel et non structuré", "score": 1},
+        {"label": "Suivi régulier pour certaines activités", "score": 2},
+        {"label": "KPI utilisés dans la majorité des décisions opérationnelles", "score": 3},
+        {"label": "Pilotage systématique par les KPI avec amélioration continue", "score": 4}
+      ],
+      "poids": 5,
+      "niveau": "progressif",
+      "applicability_rule": "always",
+      "na_allowed": false,
+      "score_mode": "normal",
+      "llm_context": {
+        "description": "Usage des KPI",
+        "objectif": "Mesurer le niveau data-driven"
+      }
+    },
+
+    {
+      "question_id": "CULT_TRAIN_001",
+      "parent_question_id": null,
+      "question_type": "scored",
+      "question_label": "Des actions de formation ou d’acculturation à la donnée sont-elles mises en place ?",
+      "question_help": "Inclut formation, sensibilisation et accompagnement des équipes.",
+      "type_reponse": "single_choice",
+      "choices": [
+        {"label": "Aucune formation", "score": 0},
+        {"label": "Formation ponctuelle ou informelle", "score": 1},
+        {"label": "Formation structurée pour certains profils", "score": 2},
+        {"label": "Formation régulière pour la majorité des équipes", "score": 3},
+        {"label": "Programme structuré d’acculturation data à l’échelle de l’entreprise", "score": 4}
+      ],
+      "poids": 3,
+      "niveau": "progressif",
+      "applicability_rule": "always",
+      "na_allowed": false,
+      "score_mode": "normal",
+      "llm_context": {
+        "description": "Acculturation data",
+        "objectif": "Mesurer la diffusion de la culture"
+      }
+    },
+
+    {
+      "question_id": "CULT_EVID_001",
+      "parent_question_id": "CULT_KPI_001",
+      "question_type": "evidence",
+      "question_label": "Quels KPI sont suivis et comment sont-ils utilisés ?",
+      "type_reponse": "text",
+      "choices": [],
+      "poids": 0,
+      "niveau": "support",
+      "applicability_rule": "always",
+      "na_allowed": true,
+      "score_mode": "normal"
+    },
+	{
+      "question_id": "CULT_AWARE_001",
+      "question_type": "scored",
+      "question_label": "Dans quelle mesure les équipes comprennent-elles l’importance de la donnée ?",
+      "type_reponse": "single_choice",
+      "choices": [
+        {"label": "Aucune sensibilisation", "score": 0},
+        {"label": "Sensibilisation limitée à certains individus", "score": 1},
+        {"label": "La donnée est reconnue comme utile pour les opérations", "score": 2},
+        {"label": "La donnée est considérée comme un levier clé dans la majorité des activités", "score": 3},
+        {"label": "La donnée est au cœur de la stratégie et des décisions", "score": 4}
+      ],
+      "poids": 4,
+      "niveau": "progressif",
+      "applicability_rule": "always",
+      "na_allowed": false,
+      "score_mode": "normal"
+    },
+
+    {
+      "question_id": "CULT_KPI_001",
+      "question_type": "scored",
+      "question_label": "Dans quelle mesure les KPI sont-ils utilisés pour piloter les activités ?",
+      "type_reponse": "single_choice",
+      "choices": [
+        {"label": "Aucun suivi des KPI", "score": 0},
+        {"label": "Suivi ponctuel et non structuré", "score": 1},
+        {"label": "KPI suivis avec des outils standards (Excel, etc.)", "score": 2},
+        {"label": "KPI utilisés régulièrement dans la prise de décision", "score": 3},
+        {"label": "Pilotage systématique basé sur les KPI avec amélioration continue", "score": 4}
+      ],
+      "poids": 5,
+      "niveau": "progressif",
+      "applicability_rule": "always",
+      "na_allowed": false,
+      "score_mode": "normal"
+    },
+
+    {
+      "question_id": "CULT_TRAIN_001",
+      "question_type": "scored",
+      "question_label": "Des actions de formation à la donnée sont-elles mises en place ?",
+      "type_reponse": "single_choice",
+      "choices": [
+        {"label": "Aucune formation", "score": 0},
+        {"label": "Formation ponctuelle ou informelle", "score": 1},
+        {"label": "Formation de base sur la collecte et les KPI", "score": 2},
+        {"label": "Formation régulière pour la majorité des équipes", "score": 3},
+        {"label": "Programme structuré d’acculturation data à l’échelle de l’entreprise", "score": 4}
+      ],
+      "poids": 3,
+      "niveau": "progressif",
+      "applicability_rule": "always",
+      "na_allowed": false,
+      "score_mode": "normal"
+    },
+
+    {
+      "question_id": "CULT_DECISION_001",
+      "question_type": "scored",
+      "question_label": "Dans quelle mesure la donnée est-elle utilisée dans la prise de décision ?",
+      "type_reponse": "single_choice",
+      "choices": [
+        {"label": "Décisions prises sans données", "score": 0},
+        {"label": "Données utilisées ponctuellement", "score": 1},
+        {"label": "Données utilisées pour certaines décisions", "score": 2},
+        {"label": "Données utilisées pour la majorité des décisions", "score": 3},
+        {"label": "Décisions systématiquement pilotées par la donnée", "score": 4}
+      ],
+      "poids": 5,
+      "niveau": "progressif",
+      "applicability_rule": "always",
+      "na_allowed": false,
+      "score_mode": "normal"
+    },
+
+    {
+      "question_id": "CULT_EVID_001",
+      "parent_question_id": "CULT_KPI_001",
+      "question_type": "evidence",
+      "question_label": "Quels KPI sont suivis et comment sont-ils utilisés ?",
+      "type_reponse": "text",
+      "choices": [],
+      "poids": 0,
+      "niveau": "support",
+      "applicability_rule": "always",
+      "na_allowed": true,
+      "score_mode": "normal"
+    },
+	{
+      "question_id": "CULT_AWARE_001",
+      "parent_question_id": null,
+      "question_type": "scored",
+      "question_label": "Dans quelle mesure les équipes comprennent-elles la valeur de la donnée ?",
+      "question_help": "Évalue la perception de la donnée comme support opérationnel ou levier stratégique.",
+      "type_reponse": "single_choice",
+      "choices": [
+        {"label": "Aucune sensibilisation à la donnée", "score": 0},
+        {"label": "Sensibilisation limitée à certains individus", "score": 1},
+        {"label": "La donnée est reconnue comme utile pour les opérations", "score": 2},
+        {"label": "La donnée est perçue comme un levier important pour l’activité", "score": 3},
+        {"label": "La donnée est au cœur de la stratégie de l’entreprise", "score": 4}
+      ],
+      "poids": 4,
+      "niveau": "progressif",
+      "applicability_rule": "always",
+      "na_allowed": false,
+      "score_mode": "normal",
+      "llm_context": {
+        "description": "Culture data",
+        "objectif": "Mesurer la maturité stratégique"
+      }
+    },
+
+    {
+      "question_id": "CULT_KPI_001",
+      "parent_question_id": null,
+      "question_type": "scored",
+      "question_label": "Dans quelle mesure les KPI sont-ils utilisés pour piloter les activités ?",
+      "question_help": "Inclut le suivi, la structuration et l’usage des indicateurs.",
+      "type_reponse": "single_choice",
+      "choices": [
+        {"label": "Aucun suivi des KPI", "score": 0},
+        {"label": "Suivi ponctuel et non structuré", "score": 1},
+        {"label": "KPI suivis avec des outils simples (Excel, etc.)", "score": 2},
+        {"label": "KPI suivis de manière structurée avec des rapports réguliers", "score": 3},
+        {"label": "KPI pilotés via des tableaux de bord et utilisés en continu", "score": 4}
+      ],
+      "poids": 5,
+      "niveau": "progressif",
+      "applicability_rule": "always",
+      "na_allowed": false,
+      "score_mode": "normal",
+      "llm_context": {
+        "description": "Pilotage par les KPI",
+        "objectif": "Mesurer le niveau data-driven"
+      }
+    },
+
+    {
+      "question_id": "CULT_DECISION_001",
+      "parent_question_id": null,
+      "question_type": "scored",
+      "question_label": "Dans quelle mesure la donnée est-elle utilisée dans la prise de décision ?",
+      "question_help": "Évalue l’intégration de la donnée dans les décisions opérationnelles et stratégiques.",
+      "type_reponse": "single_choice",
+      "choices": [
+        {"label": "Décisions prises sans données", "score": 0},
+        {"label": "Données utilisées ponctuellement", "score": 1},
+        {"label": "Données utilisées pour certaines décisions", "score": 2},
+        {"label": "Données utilisées pour la majorité des décisions", "score": 3},
+        {"label": "Décisions systématiquement pilotées par la donnée", "score": 4}
+      ],
+      "poids": 5,
+      "niveau": "progressif",
+      "applicability_rule": "always",
+      "na_allowed": false,
+      "score_mode": "normal"
+    },
+
+    {
+      "question_id": "CULT_TRAIN_001",
+      "parent_question_id": null,
+      "question_type": "scored",
+      "question_label": "Des actions de formation ou d’acculturation à la donnée sont-elles mises en place ?",
+      "question_help": "Inclut formation, sensibilisation et accompagnement des équipes.",
+      "type_reponse": "single_choice",
+      "choices": [
+        {"label": "Aucune formation", "score": 0},
+        {"label": "Formation ponctuelle ou informelle", "score": 1},
+        {"label": "Formation de base sur les KPI et la donnée", "score": 2},
+        {"label": "Formation régulière pour la majorité des équipes", "score": 3},
+        {"label": "Programme structuré d’acculturation data à l’échelle de l’entreprise", "score": 4}
+      ],
+      "poids": 3,
+      "niveau": "progressif",
+      "applicability_rule": "always",
+      "na_allowed": false,
+      "score_mode": "normal"
+    },
+
+    {
+      "question_id": "CULT_USAGE_001",
+      "parent_question_id": null,
+      "question_type": "scored",
+      "question_label": "Dans quelle mesure les équipes utilisent-elles des outils de visualisation ou des dashboards ?",
+      "question_help": "Évalue l’usage des outils pour interpréter et exploiter la donnée.",
+      "type_reponse": "single_choice",
+      "choices": [
+        {"label": "Aucun outil utilisé", "score": 0},
+        {"label": "Utilisation très limitée", "score": 1},
+        {"label": "Utilisation d’outils simples (Excel)", "score": 2},
+        {"label": "Utilisation régulière d’outils de visualisation", "score": 3},
+        {"label": "Utilisation généralisée avec dashboards automatisés", "score": 4}
+      ],
+      "poids": 3,
+      "niveau": "progressif",
+      "applicability_rule": "only_if(CULT_KPI_001 >= 2)",
+      "na_allowed": true,
+      "score_mode": "exclude_if_na",
+      "llm_context": {
+        "description": "Usage des outils data",
+        "objectif": "Mesurer l’exploitation des données"
+      }
+    },
+
+    {
+      "question_id": "CULT_EVID_001",
+      "parent_question_id": "CULT_KPI_001",
+      "question_type": "evidence",
+      "question_label": "Quels KPI sont suivis et comment sont-ils utilisés dans l’organisation ?",
+      "type_reponse": "text",
+      "choices": [],
+      "poids": 0,
+      "niveau": "support",
+      "applicability_rule": "always",
+      "na_allowed": true,
+      "score_mode": "normal"
+    },
+
+	 {
+      "question_id": "GOV_POLICY_001",
+      "parent_question_id": null,
+      "question_type": "scored",
+      "question_label": "Des politiques de gouvernance des données sont-elles définies ?",
+      "question_help": "Inclut règles de gestion, standards et principes de gouvernance.",
+      "type_reponse": "single_choice",
+      "choices": [
+        {"label": "Aucune politique définie", "score": 0},
+        {"label": "Politiques informelles ou implicites", "score": 1},
+        {"label": "Politiques définies pour certains domaines", "score": 2},
+        {"label": "Politiques formalisées et documentées", "score": 3},
+        {"label": "Politiques complètes, maintenues et alignées avec la stratégie", "score": 4}
+      ],
+      "poids": 5,
+      "niveau": "progressif",
+      "applicability_rule": "always",
+      "na_allowed": false,
+      "score_mode": "normal",
+	  "valeur_donnee": "Descriptive",
+	  "domaine_principal": "Data Management",
+	  "domaine_specifique": "Gouvernance",
+	  "niveau_scorecard": 2,
+	  "capability_group": "NA",
+	  "ordre_domaine_principal": 2,
+	  "ordre_domaine_specifique": 1,
+	  "ordre_niveau": 1
+    },
+    {
+      "question_id": "GOV_ROLE_001",
+      "parent_question_id": null,
+      "question_type": "scored",
+      "question_label": "Les rôles et responsabilités liés à la gestion des données sont-ils définis ?",
+      "question_help": "Inclut data owner, data steward, responsables métiers, etc.",
+      "type_reponse": "single_choice",
+      "choices": [
+        {"label": "Aucun rôle défini", "score": 0},
+        {"label": "Rôles informels ou implicites", "score": 1},
+        {"label": "Rôles définis pour certains périmètres", "score": 2},
+        {"label": "Rôles clairement définis et documentés", "score": 3},
+        {"label": "Rôles formalisés avec responsabilités actives et pilotage", "score": 4}
+      ],
+      "poids": 4,
+      "niveau": "progressif",
+      "applicability_rule": "always",
+      "na_allowed": false,
+      "score_mode": "normal"
+    },
+
+    {
+      "question_id": "GOV_USAGE_001",
+      "parent_question_id": null,
+      "question_type": "scored",
+      "question_label": "Dans quelle mesure les règles de gouvernance sont-elles appliquées ?",
+      "question_help": "Évalue si les politiques sont réellement utilisées dans les opérations.",
+      "type_reponse": "single_choice",
+      "choices": [
+        {"label": "Aucune application des règles", "score": 0},
+        {"label": "Application ponctuelle ou informelle", "score": 1},
+        {"label": "Application partielle selon les équipes", "score": 2},
+        {"label": "Application cohérente dans la majorité des cas", "score": 3},
+        {"label": "Application systématique avec contrôle et amélioration continue", "score": 4}
+      ],
+      "poids": 5,
+      "niveau": "progressif",
+      "applicability_rule": "only_if(GOV_POLICY_001 >= 2)",
+      "na_allowed": true,
+      "score_mode": "exclude_if_na"
+    },
+
+    {
+      "question_id": "GOV_ACCESS_001",
+      "parent_question_id": null,
+      "question_type": "scored",
+      "question_label": "Des règles de contrôle d’accès aux données sont-elles mises en place ?",
+      "question_help": "Inclut gestion des accès aux données sensibles et règles de protection de base.",
+      "type_reponse": "single_choice",
+      "choices": [
+        {"label": "Aucun contrôle d’accès", "score": 0},
+        {"label": "Contrôle d’accès informel", "score": 1},
+        {"label": "Contrôle d’accès défini pour certaines données", "score": 2},
+        {"label": "Contrôle d’accès structuré et appliqué", "score": 3},
+        {"label": "Contrôle d’accès robuste avec suivi et audit", "score": 4}
+      ],
+      "poids": 4,
+      "niveau": "progressif",
+      "applicability_rule": "always",
+      "na_allowed": false,
+      "score_mode": "normal"
+    },
+
+    {
+      "question_id": "GOV_EVID_001",
+      "parent_question_id": "GOV_POLICY_001",
+      "question_type": "evidence",
+      "question_label": "Quels documents formalisent la gouvernance des données ?",
+      "question_help": "Exemples : politiques, chartes, rôles, procédures.",
+      "type_reponse": "text",
+      "choices": [],
+      "poids": 0,
+      "niveau": "support",
+      "applicability_rule": "always",
+      "na_allowed": true,
+      "score_mode": "normal"
+    }
+  ]
+}
