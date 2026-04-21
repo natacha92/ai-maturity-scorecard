@@ -15,7 +15,7 @@ def parse_rule(rule: Optional[str], responses: Dict[str, Dict[str, Any]]) -> boo
 
                 response = responses.get(left)
                 if not response:
-                    return False
+                    return True
 
                 if (right.startswith("'") and right.endswith("'")) or (
                     right.startswith('"') and right.endswith('"')
