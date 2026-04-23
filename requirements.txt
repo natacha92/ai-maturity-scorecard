@@ -1,5 +1,9 @@
+<<<<<<< HEAD
 streamlit
 sqlalchemy
 pandas
 plotly
 reportlab
+=======
+streamlit
+>>>>>>> 4d21a07f1eb59284ad0d7a8d4c38ce706e8e8fdd

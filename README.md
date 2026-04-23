@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 # Data Maturity Scorecard
 
 Application Streamlit de diagnostic de maturité data pour cabinets de conseil.  
@@ -555,3 +556,24 @@ Exemple : `EVID_GOV_005_D1`, `EVID_GOV_005_D2`
 ## Licence
 
 Voir `LICENSE`.
+=======
+# 🎈 Blank app template
+
+A simple Streamlit app template for you to modify!
+
+[![Open in Streamlit](https://static.streamlit.io/badges/streamlit_badge_black_white.svg)](https://blank-app-template.streamlit.app/)
+
+### How to run it on your own machine
+
+1. Install the requirements
+
+   ```
+   $ pip install -r requirements.txt
+   ```
+
+2. Run the app
+
+   ```
+   $ streamlit run streamlit_app.py
+   ```
+>>>>>>> 4d21a07f1eb59284ad0d7a8d4c38ce706e8e8fdd

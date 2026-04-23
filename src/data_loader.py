@@ -35,6 +35,7 @@ def load_questionnaire(path: Path) -> List[Dict[str, Any]]:
 
     return questions
 
+<<<<<<< HEAD
 # ── Index rapide par question_id ──────────────────────────────────────────────
 
 def build_question_index(questions: List[Dict[str, Any]]) -> Dict[str, Dict[str, Any]]:
@@ -133,6 +134,15 @@ def is_question_applicable(
 
     # Règle non reconnue → on affiche par sécurité
     return True
+=======
+def get_domains(questions: List[Dict[str, Any]]) -> List[str]:
+    domains = []
+    for q in questions:
+        domain = q.get("domaine_principal", "Autre")
+        if domain not in domains:
+            domains.append(domain)
+    return domains
+>>>>>>> 4d21a07f1eb59284ad0d7a8d4c38ce706e8e8fdd
 
 @st.cache_data(show_spinner=False)
 def load_questionnaire_cached(path_str: str) -> List[Dict[str, Any]]:
