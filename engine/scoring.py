@@ -317,26 +317,43 @@ def _safe_score(data: Dict[str, float]) -> Optional[float]:
 
 def compute_completion(
     questions: List[Dict[str, Any]],
-    responses: Dict[str, Dict[str, Any]]
-) -> Tuple[int, int]:
+    responses: Dict[str, Dict[str, Any]],
+    domain: Optional[str] = None,
+) -> Tuple[int, int, int, int]:
     """
-    Retourne (questions_répondues, questions_applicables_total).
-    Utile pour afficher une barre de progression dans le questionnaire.
+    Retourne (scored_répondues, scored_total, evidence_remplies, evidence_total).
+    Une question est considérée répondue si elle est présente dans responses
+    (sauvegardée en base), quelle que soit la valeur du score.
     """
-    total = 0
-    answered = 0
+    scored_total    = 0
+    scored_answered = 0
+    evid_total      = 0
+    evid_answered   = 0
 
     for q in questions:
-        if q.get("question_type") == "evidence":
-            continue  # on ne compte pas les preuves dans la completion
+        # Filtre domaine
+        if domain and q.get("domaine_principal") != domain:
+            continue
+        # Filtre applicabilité — on utilise responses pour les règles
         if not parse_rule(q.get("applicability_rule", "always"), responses):
             continue
-        total += 1
-        r = responses.get(q["question_id"])
-        if r and (r.get("score") is not None or r.get("is_na")):
-            answered += 1
 
-    return answered, total
+        qtype = q.get("question_type")
+        qid   = q["question_id"]
+
+        # Une question est répondue si elle est présente dans responses (a été sauvegardée)
+        is_answered = qid in responses
+
+        if qtype == "scored":
+            scored_total += 1
+            if is_answered:
+                scored_answered += 1
+        elif qtype == "evidence":
+            evid_total += 1
+            if is_answered:
+                evid_answered += 1
+
+    return scored_answered, scored_total, evid_answered, evid_total
 
 def compute_gap_analysis(
     domain_scores: Dict[str, Optional[float]],

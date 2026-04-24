@@ -213,6 +213,9 @@ class DocumentReview(Base):
     # "Élevée" | "Moyenne" | "Faible"
     expert_confidence = Column(String(20), default="Moyenne")
 
+    # Coche "Document remis" — le client a bien fourni ce document
+    document_remis = Column(Boolean, default=False)
+
     created_at  = Column(DateTime, default=lambda: datetime.now(timezone.utc))
     reviewed_at = Column(DateTime, nullable=True)   # Date de dernière analyse
 
@@ -229,6 +232,7 @@ class DocumentReview(Base):
             "doc_id":             self.doc_id,
             "document_label":     self.document_label,
             "status":             self.status,
+            "document_remis":     self.document_remis or False,
             "elements_trouves":   self.elements_trouves,
             "elements_manquants": self.elements_manquants,
             "observation":        self.observation,

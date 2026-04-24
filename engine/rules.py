@@ -21,7 +21,9 @@ def parse_rule(rule: Optional[str], responses: Dict[str, Dict[str, Any]]) -> boo
                     right.startswith('"') and right.endswith('"')
                 ):
                     expected_text = right[1:-1]
-                    current_text = response.get("selected_choice") or response.get("value")
+                    current_text = (response.get("selected_choice")
+                                    or response.get("label")
+                                    or response.get("value"))
                     if current_text is None:
                         return False
                     return operator == "==" and str(current_text) == expected_text
